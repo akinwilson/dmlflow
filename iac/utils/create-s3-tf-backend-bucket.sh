@@ -1,6 +1,5 @@
 #!/bin/bash
 set -e
-# first need the bucket to exists in aws where the  state of the infrastructure is kept
 
 AWS_PROFILE="akinwilson"
 AWS_REGION="eu-west-2"

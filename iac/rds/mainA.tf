@@ -17,7 +17,7 @@ resource "aws_rds_cluster" "aurora_db" {
   database_name                 = var.database_name
   master_username               = var.database_user
   master_password               = random_password.password.result
-  backup_retention_period       = 1 // Think about
+  backup_retention_period       = 5 // Think about
   deletion_protection           = true
   snapshot_identifier           = var.snapshot_id
 
