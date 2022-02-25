@@ -1,3 +1,4 @@
+
 resource "aws_iam_role" "ecs_task_execution_role" {
   name = "${var.name}-ecsTaskExecutionRole"
 
@@ -36,10 +37,27 @@ resource "aws_iam_role_policy_attachment" "ecs-task-execution-role-policy-attach
   policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonECSTaskExecutionRolePolicy"
 }
 
-# resource "aws_iam_role_policy_attachment" "ecs-task-role-policy-attachment" {
-#   role       = aws_iam_role.ecs_task_role.name
-#   policy_arn = aws_iam_policy.efs.arn
-# }
+resource "aws_iam_policy" "s3" {
+  name        = "${var.name}-ecs-s3"
+  description = "Policy that allows access s3"
+  policy = jsonencode({
+    Version = "2012-10-17",
+    Statement = [
+      {
+        Effect = "Allow",
+        Action = [
+                "s3:*",
+                "s3-object-lambda:*"
+        ],
+        Resource  = "*"
+        }]
+  })
+}
+
+resource "aws_iam_role_policy_attachment" "ecs-task-role-policy-attachment" {
+  role       = aws_iam_role.ecs_task_role.name
+  policy_arn = aws_iam_policy.s3.arn
+}
 
 
 resource "aws_cloudwatch_log_group" "main" {
