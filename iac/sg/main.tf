@@ -1,33 +1,27 @@
 resource "aws_security_group" "rds" {
     name   = "${var.name}-sg-rds-${var.environment}"
-  vpc_id = var.vpc_id
+    vpc_id = var.vpc_id
+    ingress {
+        protocol         = "-1"
+        description = "port of mysql server"
+        from_port        = 3306
+        to_port          = 3306
+        cidr_blocks      = ["10.0.0.0/20"]
+    }
+    egress {
+        protocol         = "-1"
+        from_port        = 0
+        to_port          = 0
+        cidr_blocks      = ["0.0.0.0/0"]
+        ipv6_cidr_blocks = ["::/0"]
+    }
+    tags = {
+        Name        = "${var.name}-sg-rds-${var.environment}"
+        Environment = var.environment
+    }
+}
 
-  ingress {
-    protocol         = "tcp"
-    from_port        = 80
-    to_port          = 80
-    cidr_blocks      = ["0.0.0.0/0"]
-    ipv6_cidr_blocks = ["::/0"]
-  }
 
-  ingress {
-    protocol         = "tcp"
-    from_port        = 443
-    to_port          = 443
-    cidr_blocks      = ["0.0.0.0/0"]
-    ipv6_cidr_blocks = ["::/0"]
-  }
-
-  egress {
-    protocol         = "-1"
-    from_port        = 0
-    to_port          = 0
-    cidr_blocks      = ["0.0.0.0/0"]
-    ipv6_cidr_blocks = ["::/0"]
-  }
-
-  tags = {
-    Name        = "${var.name}-sg-alb-${var.environment}"
-    Environment = var.environment
-  }
+output rds {
+    value = aws_security_group.rds
 }

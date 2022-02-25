@@ -6,6 +6,10 @@ variable "environment" {
   description = "the name of your environment, e.g. \"prod\""
 }
 
+variable "sg" {
+  description = "security group for rds"
+}
+
 variable "vpc_id" {
   type        = string
   description = "VPC ID"
@@ -79,6 +83,8 @@ variable "instance_count" {
   description = "How many instances in the cluster"
   default     = 1
 }
+
+
 
 variable "proxy_subnets" {
   type        = list(string)

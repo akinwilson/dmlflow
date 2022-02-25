@@ -91,7 +91,6 @@ resource "aws_db_proxy" "aurora_proxy" {
 
 resource "aws_db_proxy_default_target_group" "aurora_proxy_target_group" {
   db_proxy_name = aws_db_proxy.aurora_proxy.name
-
   connection_pool_config {
     connection_borrow_timeout = 120
     max_connections_percent   = 95
@@ -104,13 +103,13 @@ resource "aws_db_proxy_target" "aurora_proxy_target" {
   target_group_name     = aws_db_proxy_default_target_group.aurora_proxy_target_group.name
 }
 
-resource "aws_db_proxy_endpoint" "aurora_proxy_readonly_endpoint" {
-  db_proxy_name          = aws_db_proxy.aurora_proxy.name
-  db_proxy_endpoint_name = "${local.prefix}-proxy-readonly-endpoint"
-  vpc_security_group_ids = [aws_security_group.lambda_proxy_sg.id]
-  vpc_subnet_ids         = var.proxy_subnets
-  target_role            = "READ_ONLY"
-}
+# resource "aws_db_proxy_endpoint" "aurora_proxy_readonly_endpoint" {
+#   db_proxy_name          = aws_db_proxy.aurora_proxy.name
+#   db_proxy_endpoint_name = "${local.prefix}-proxy-readonly-endpoint"
+#   vpc_security_group_ids = [aws_security_group.lambda_proxy_sg.id]
+#   vpc_subnet_ids         = var.proxy_subnets
+#   target_role            = "READ_ONLY"
+# }
 
 resource "aws_iam_role_policy" "proxy_iam_role_policy" {
   name = "${local.prefix}_proxy_role_policy"
@@ -182,49 +181,49 @@ resource "aws_secretsmanager_secret_version" "db_access_secret_value" {
   })
 }
 
-resource "aws_security_group" "lambda_proxy_sg" {
-  name        = "${var.env}_${var.cluster_identifier}_lamdba_proxy_sg"
-  description = "Allow traffic between lambda and rds proxy"
-  vpc_id      = var.vpc_id
+# resource "aws_security_group" "lambda_proxy_sg" {
+#   name        = "${var.env}_${var.cluster_identifier}_lamdba_proxy_sg"
+#   description = "Allow traffic between lambda and rds proxy"
+#   vpc_id      = var.vpc_id
 
-  ingress = [
-    {
-      description = "Traffic between lambda and rds proxy"
-      from_port   = local.database_port
-      to_port     = local.database_port
-      protocol    = "tcp"
-      self        = true
+#   ingress = [
+#     {
+#       description = "Traffic between lambda and rds proxy"
+#       from_port   = local.database_port
+#       to_port     = local.database_port
+#       protocol    = "tcp"
+#       self        = true
 
-      cidr_blocks      = []
-      ipv6_cidr_blocks = []
-      prefix_list_ids  = []
-      security_groups  = []
-    }
-  ]
+#       cidr_blocks      = []
+#       ipv6_cidr_blocks = []
+#       prefix_list_ids  = []
+#       security_groups  = []
+#     }
+#   ]
 
-  egress = [
-    {
-      description = "Traffic between lambda and rds proxy"
-      from_port   = local.database_port
-      to_port     = local.database_port
-      protocol    = "tcp"
-      self        = true
+#   egress = [
+#     {
+#       description = "Traffic between lambda and rds proxy"
+#       from_port   = local.database_port
+#       to_port     = local.database_port
+#       protocol    = "tcp"
+#       self        = true
 
-      cidr_blocks      = []
-      ipv6_cidr_blocks = []
-      prefix_list_ids  = []
-      security_groups  = []
-    }
-  ]
+#       cidr_blocks      = []
+#       ipv6_cidr_blocks = []
+#       prefix_list_ids  = []
+#       security_groups  = []
+#     }
+#   ]
 
-  tags = {
-    Name = "${var.env}_${var.cluster_identifier}_lambda_proxy_sg"
-  }
+#   tags = {
+#     Name = "${var.env}_${var.cluster_identifier}_lambda_proxy_sg"
+#   }
 
-  lifecycle {
-    create_before_destroy = true
-  }
-}
+#   lifecycle {
+#     create_before_destroy = true
+#   }
+# }
 
 resource "aws_security_group" "proxy_db_sg" {
   name        = "${var.env}_${var.cluster_identifier}_proxy_db_sg"
@@ -271,7 +270,7 @@ resource "aws_security_group" "proxy_db_sg" {
 }
 
 resource "aws_ssm_parameter" "sg_id" {
-  name        = "${var.env}_${var.cluster_identifier}_RDSProxySecurityGroupId"
+  name        = "${var.environment}_${var.cluster_identifier}_RDSProxySecurityGroupId"
   description = "Security group id for RDS Proxy"
   type        = "SecureString"
   value       = aws_security_group.lambda_proxy_sg.id
@@ -292,46 +291,46 @@ resource "aws_ssm_parameter" "db_host" {
   }
 }
 
-resource "aws_ssm_parameter" "db_ro_host" {
-  name        = "${var.env}${var.ssm_db_ro_host_name}"
-  description = "Read Only Host for Aurora DB"
-  type        = "SecureString"
-  value       = aws_db_proxy_endpoint.aurora_proxy_readonly_endpoint.endpoint
+# resource "aws_ssm_parameter" "db_ro_host" {
+#   name        = "${var.environment}${var.ssm_db_ro_host_name}"
+#   description = "Read Only Host for Aurora DB"
+#   type        = "SecureString"
+#   value       = aws_db_proxy_endpoint.aurora_proxy_readonly_endpoint.endpoint
 
-  tags = {
-    environment = var.env
-  }
-}
+#   tags = {
+#     environment = var.env
+#   }
+# }
 
 resource "aws_ssm_parameter" "db_database_name" {
-  name        = "${var.env}${var.ssm_db_database_name}"
+  name        = "${var.enviroment}${var.ssm_db_database_name}"
   description = "Database name for Aurora DB"
   type        = "SecureString"
   value       = var.database_name
 
   tags = {
-    environment = var.env
+    environment = var.environment
   }
 }
 
 resource "aws_ssm_parameter" "db_user" {
-  name        = "${var.env}${var.ssm_db_user}"
+  name        = "${var.environment}${var.ssm_db_user}"
   description = "User for Aurora DB"
   type        = "SecureString"
   value       = var.database_user
 
   tags = {
-    environment = var.env
+    environment = var.environment
   }
 }
 
 resource "aws_ssm_parameter" "db_password" {
-  name        = "${var.env}${var.ssm_db_password}"
+  name        = "${var.environment}${var.ssm_db_password}"
   description = "Password for Aurora DB"
   type        = "SecureString"
   value       = random_password.password.result
 
   tags = {
-    environment = var.env
+    environment = var.environment
   }
 }
