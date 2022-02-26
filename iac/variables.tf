@@ -38,3 +38,13 @@ variable "isolated_subnets" {
   description = "a list fo CIDRs for the isolated subnets for aurora service"
   default = ["10.0.32.0/20", "10.0.96.0/20"]
 }
+
+variable "service_desired_count" {
+  description = "Number of tasks running in parallel"
+  default     = 1
+}
+
+variable "container_environment" {
+  description = "Variables to be injected at serving time into the mlflow server"
+  default =  [{"BUCKET": "...", "USERNAME" : "...",  "PASSWORD" : "...", "HOST": "...","PORT": "..."}]
+}

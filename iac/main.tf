@@ -39,8 +39,8 @@ module "rds" {
     source = "./rds"
     name = var.name
     environment = var.environment
-    vpc_id = vpc.id
-    sg = sg.rds 
+    vpc_id = module.vpc.id
+    sg = module.sg.rds 
 }
 
 module  "s3" {
@@ -64,9 +64,12 @@ module ecs {
     name = var.name
     region = var.region
     sg = module.sg.ecs
+    alb_target_group_arn = module.alb.alb_target_group_arn
+    service_desired_count = var.service_desired_count
     environment = var.environment
     ecr_repo_url = module.ecr.ecr_repo_url
     private_subnets = module.vpc.private
+    container_environment = var.container_environment
     container_port = var.container_port
     container_cpu = var.container_cpu
     container_memory = var.container_memory
@@ -78,8 +81,6 @@ module "ecr" {
     environment = var.environment
 
 }
-
-
 # Note that we want to linked the name of the state bucket to the 
 # to where within the resource below it is mentioned 
 
