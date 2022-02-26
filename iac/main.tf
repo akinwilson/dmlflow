@@ -80,6 +80,10 @@ module "ecr" {
 }
 
 
+# Note that we want to linked the name of the state bucket to the 
+# to where within the resource below it is mentioned 
+
+# recall that ./utils/create-bucket uses the same name as below 
 data "aws_iam_policy_document" "iam_policy_document" {
   statement {
     sid     = "AllowSpecificS3FullAccess"
