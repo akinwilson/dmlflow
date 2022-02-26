@@ -2,11 +2,11 @@ resource "aws_security_group" "rds" {
     name   = "${var.name}-sg-rds-${var.environment}"
     vpc_id = var.vpc_id
     ingress  {
-        protocol         = "-1"
+        protocol         = "tcp"
         description = "port of mysql server"
         from_port        = 3306
         to_port          = 3306
-        cidr_blocks      = ["10.0.0.0/20"]
+        cidr_blocks      = ["10.0.0.0/28"]
     }
     egress  {
         protocol         = "-1"
