@@ -54,6 +54,9 @@ module "alb" {
     source = "./alb"
     name = var.name
     environment = var.environment
+    public_subnets = vpc.public
+    vpc_id = vpc.id 
+    sg = sg.alb 
 }
 
 module ecs {
