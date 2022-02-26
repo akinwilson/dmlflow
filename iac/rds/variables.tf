@@ -24,24 +24,25 @@ variable "snapshot_id" {
 variable "cluster_identifier" {
   type        = string
   description = "Name of the aurora cluster"
+  default = "mlflow-backend"
 }
 
 variable "database_name" {
   type        = string
   description = "Name of the DB in mysql"
-  default     = ""
+  default     = "mlflow-store"
 }
 
 variable "database_user" {
   type        = string
   description = "Username for accessing the database"
-  default     = ""
+  default     = "admin"
 }
 
 variable "database_password" {
   type        = string
   description = "Password for accessing the database"
-  default     = ""
+  default     = "admin"
 }
 
 variable "replication_source_identifier" {
@@ -49,18 +50,6 @@ variable "replication_source_identifier" {
   description = "DB ID to create the read replica from"
   default     = ""
 }
-
-# variable "db_host_name" {
-#   type        = string
-#   description = "SSM parameter name for the db host"
-# }
-
-# variable "db_database_name" {
-#   type        = string
-#   description = "SSM parameter name for the db name"
-#   default     = ""
-# }
-
 variable "instance_count" {
   type        = number
   description = "How many instances in the cluster"
@@ -68,6 +57,5 @@ variable "instance_count" {
 }
 
 variable "isolated_subnets" {
-  type        = list(string)
   description = "What subnets should the proxy for the db be in"
 }

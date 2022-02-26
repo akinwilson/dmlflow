@@ -33,6 +33,7 @@ module "sg" {
     source = "./sg"
     name = var.name
     environment = var.environment
+    vpc_id = module.vpc.id
 }
 
 module "rds" {
@@ -40,13 +41,15 @@ module "rds" {
     name = var.name
     environment = var.environment
     vpc_id = module.vpc.id
-    sg = module.sg.rds 
+    sg = [module.sg.rds]
+    isolated_subnets = module.vpc.isolated
 }
 
 module  "s3" {
     source = "./s3"
     name = var.name
     environment = var.environment   
+    region = var.region
 }
 
 
@@ -56,14 +59,14 @@ module "alb" {
     environment = var.environment
     public_subnets = module.vpc.public
     vpc_id = module.vpc.id 
-    sg = module.sg.alb 
+    sg = [module.sg.alb]
 }
 
 module ecs {
     source = "./ecs"
     name = var.name
     region = var.region
-    sg = module.sg.ecs
+    sg = [module.sg.ecs]
     alb_target_group_arn = module.alb.alb_target_group_arn
     service_desired_count = var.service_desired_count
     environment = var.environment

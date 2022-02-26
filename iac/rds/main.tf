@@ -3,12 +3,10 @@ locals {
   database_port   = 3306
   database_engine = "aurora-mysql"
 }
-
 resource "random_password" "password" {
   length  = 24
   special = false
 }
-
 resource "aws_rds_cluster" "main" {
   cluster_identifier            = var.cluster_identifier
   engine                        = local.database_engine
@@ -20,16 +18,12 @@ resource "aws_rds_cluster" "main" {
   backup_retention_period       = 5 // Think about
   deletion_protection           = true
   snapshot_identifier           = var.snapshot_id
-
   skip_final_snapshot = true
   storage_encrypted   = true
   # kms_key_id          = module.dev_db_kms_key.key_arn
-
   db_subnet_group_name = aws_db_subnet_group.main.name
-
-  vpc_security_group_ids = [
-    var.sg
-  ]
+  vpc_security_group_ids = var.sg
+  
 
   lifecycle {
     ignore_changes = [
@@ -45,7 +39,7 @@ resource "aws_rds_cluster" "main" {
 resource "aws_db_subnet_group" "main" {
   name_prefix     = "${local.prefix}-subnet-group"
   description = "Subnet group for ${local.prefix}"
-  subnet_ids = var.isolated_subnets
+  subnet_ids = var.isolated_subnets.*.id
   tags = {
     Name = "${local.prefix}-subnet-group"
     Environment = var.environment

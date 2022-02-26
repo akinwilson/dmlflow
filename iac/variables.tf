@@ -1,6 +1,6 @@
 variable "name" {
   description = "The name of the stack"
-  default     = "cloud-native-mlops"
+  default     = "mlops"
 }
 
 variable "environment" {
@@ -44,6 +44,21 @@ variable "service_desired_count" {
   default     = 1
 }
 
+variable "container_port" {
+  description = "MLFlow  container port"
+  default = 5000
+}
+
+
+variable "container_cpu" {
+  description = "The number of cpu units used by the task"
+  default     = 256
+}
+
+variable "container_memory" {
+  description = "The amount (in MiB) of memory used by the task"
+  default     = 512 
+}
 variable "container_environment" {
   description = "Variables to be injected at serving time into the mlflow server"
   default =  [{"BUCKET": "...", "USERNAME" : "...",  "PASSWORD" : "...", "HOST": "...","PORT": "..."}]
