@@ -1,7 +1,7 @@
 resource "aws_s3_bucket" "main" {
-  bucket = "mlflow-backend"
+  bucket = "mlflow-artifacts-bucket"
   tags {
-        Name = "${var.name}-mlflow-backend-${var.environment}"
+        Name = "${var.name}-mlflow-artifacts-bucket-${var.environment}"
         Environment = var.environment
         }
 }
