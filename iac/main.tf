@@ -80,10 +80,6 @@ module "ecr" {
 }
 
 
-
-
-
-
 data "aws_iam_policy_document" "iam_policy_document" {
   statement {
     sid     = "AllowSpecificS3FullAccess"
