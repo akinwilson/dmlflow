@@ -30,7 +30,7 @@ variable "container_memory" {
   description = "The amount (in MiB) of memory used by the task"
 }
 
-variable "aws_alb_target_group_arn" {
+variable "alb_target_group_arn" {
   description = "ARN of the alb target group"
 }
 
@@ -41,6 +41,7 @@ variable "service_desired_count" {
 variable "container_environment" {
   description = "The container environmnent variables"
   type        = list(any)
+  
 }
 
 variable "ecr_repo_url" {
