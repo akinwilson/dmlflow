@@ -202,4 +202,17 @@ resource "aws_iam_role_policy" "vpc-flow-logs-policy" {
 }
 
 
+output "id" {
+  value = aws_vpc.main.id
+}
+output private {
+  value = aws_subnet.private
+}
+output "public" {
+  value = aws_subnet.public  
+}
+output "isolated" {
+  value = aws_subnet.isolated
+}
+
 
