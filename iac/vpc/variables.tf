@@ -22,6 +22,9 @@ variable "isolated_subnets" {
   description = "List of isolated subnets"
 }
 
+variable "region" {
+  description = "region for s3 bucket"
+}
 
 variable "availability_zones" {
   description = "List of availability zones"

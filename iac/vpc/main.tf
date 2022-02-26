@@ -18,7 +18,7 @@ resource "aws_eip" "nat" {
   }
 }
 
-resource "aws_internet_gateway" "name" {
+resource "aws_internet_gateway" "main" {
   vpc_id = aws_vpc.main.id 
   tags ={
     Name        = "${var.name}-igw-${var.environment}"
@@ -43,7 +43,7 @@ resource "aws_nat_gateway" "main" {
 resource "aws_vpc_endpoint" "s3" {
   vpc_id       = aws_vpc.main.id
   service_name = "com.amazonaws.${var.region}.s3"
-    tags {
+  tags = {
         Name = "${var.name}-vpc-endpoint-s3-${var.environment}"
         Environment = var.environment
     }
