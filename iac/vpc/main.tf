@@ -2,10 +2,42 @@ resource "aws_vpc" "main" {
     cidr_block = var.cidr
     enable_dns_hostnames = true
     enable_dns_support = true
-    tags {
+    tags = {
         Name = "${var.name}-vpc-${var.environment}"
         Environment = var.environment
     }
+}
+
+resource "aws_eip" "nat" {
+  # elastic ips for nat of private subnets 
+  count = length(var.private_subnets)
+  vpc = true 
+  tags = {
+    Name        = "${var.name}-eip-${var.environment}-${format("%03d", count.index + 1)}"
+    Environment = var.environment
+  }
+}
+
+resource "aws_internet_gateway" "name" {
+  vpc_id = aws_vpc.main.id 
+  tags ={
+    Name        = "${var.name}-igw-${var.environment}"
+    Environment = var.environment
+  }
+  
+}
+
+resource "aws_nat_gateway" "main" {
+  # we DO NOT give a gateway to the isolated subnets for aurora
+  count = length(var.private_subnets)
+  allocation_id = element(aws_eip.nat.*.id, count.index)
+  # subnet id in which to place gateway
+  subnet_id = element(aws_subnet.public.*.id, count.index)
+  tags = {
+    Name        = "${var.name}-nat-${var.environment}-${format("%03d", count.index + 1)}"
+    Environment = var.environment
+  }
+  depends_on = [aws_internet_gateway.main]
 }
 
 resource "aws_vpc_endpoint" "s3" {
@@ -118,6 +150,6 @@ resource "aws_route_table_association" "public" {
 resource "aws_route_table_association" "isolated" {
   count          = length(var.isolated_subnets)
   subnet_id      = element(aws_subnet.isolated.*.id, count.index)
-  route_table_id = aws_route_table.isolated.id
+  route_table_id = element(aws_route_table.isolated.*.id, count.index)
 }
 
