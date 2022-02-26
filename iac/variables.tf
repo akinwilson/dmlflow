@@ -34,10 +34,7 @@ variable "public_subnets" {
   default     = ["10.0.16.0/20", "10.0.48.0/20", "10.0.80.0/20"]
 }
 
-variable "cidr" {
-  description = "The CIDR block for the VPC."
-  default     = "10.0.0.0/20"
-}
 variable "isolated_subnets" {
   description = "a list fo CIDRs for the isolated subnets for aurora service"
   default = ["10.0.32.0/20", "10.0.96.0/20"]
+}
