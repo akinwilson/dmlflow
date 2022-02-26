@@ -50,33 +50,16 @@ variable "replication_source_identifier" {
   default     = ""
 }
 
-variable "ssm_db_host_name" {
-  type        = string
-  description = "SSM parameter name for the db host"
-}
+# variable "db_host_name" {
+#   type        = string
+#   description = "SSM parameter name for the db host"
+# }
 
-variable "ssm_db_ro_host_name" {
-  type        = string
-  description = "SSM parameter name for the readonly db host"
-}
-
-variable "ssm_db_database_name" {
-  type        = string
-  description = "SSM parameter name for the db name"
-  default     = ""
-}
-
-variable "ssm_db_user" {
-  type        = string
-  description = "SSM parameter name for the db user"
-  default     = ""
-}
-
-variable "ssm_db_password" {
-  type        = string
-  description = "SSM parameter name for the db password"
-  default     = ""
-}
+# variable "db_database_name" {
+#   type        = string
+#   description = "SSM parameter name for the db name"
+#   default     = ""
+# }
 
 variable "instance_count" {
   type        = number
@@ -84,14 +67,7 @@ variable "instance_count" {
   default     = 1
 }
 
-
-
-variable "proxy_subnets" {
+variable "isolated_subnets" {
   type        = list(string)
   description = "What subnets should the proxy for the db be in"
-}
-
-variable "secrets_manager_key" {
-  type        = string
-  description = "KMS key arn for decrypting secrets manager secrets"
 }
