@@ -82,6 +82,7 @@ module "ecs" {
   db_name               = module.rds.db_name
   db_user               = module.rds.db_username
   db_password           = module.rds.db_password
+  db_port = module.rds.db_port 
 }
 
 module "ecr" {

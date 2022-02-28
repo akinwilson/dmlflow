@@ -89,10 +89,10 @@ output "db_name" {
   value = aws_rds_cluster.main.database_name
 }
 
-# #
-# output "db_port" {
-#   value = aws_rds_cluster.main.port
-# }
+#
+output "db_port" {
+  value = aws_rds_cluster.main.port
+}
 
 #
 output "db_password" {
