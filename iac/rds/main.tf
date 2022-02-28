@@ -77,11 +77,11 @@ resource "aws_iam_role" "proxy_iam_role" {
 }
 
 output "db_username" {
-  value = aws_rds_cluster.main.master_username 
+  value = aws_rds_cluster.main.master_username
 }
 
 output "db_host" {
-  value = aws_rds_cluster.main.endpoint 
+  value = aws_rds_cluster.main.endpoint
 }
 
 #

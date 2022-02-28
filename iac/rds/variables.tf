@@ -36,13 +36,13 @@ variable "database_name" {
 variable "database_user" {
   type        = string
   description = "Username for accessing the database"
-  default = "admin"
+  default     = "admin"
 }
 
 variable "database_password" {
   type        = string
   description = "Password for accessing the database"
-  default = "admin"
+  default     = "admin"
 }
 
 variable "replication_source_identifier" {

@@ -62,7 +62,7 @@ variable "db_name" {
 
 variable "db_port" {
   description = "aurora databse service port"
-  default = 3036
+  default     = 3036
 }
 
 # variable "container_environment" {

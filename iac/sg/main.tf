@@ -1,24 +1,24 @@
 resource "aws_security_group" "rds" {
-    name   = "${var.name}-sg-rds-${var.environment}"
-    vpc_id = var.vpc_id
-    ingress  {
-        protocol         = "tcp"
-        description = "port of mysql server"
-        from_port        = 3306
-        to_port          = 3306
-        cidr_blocks      = ["10.0.0.0/28"]
-    }
-    egress  {
-        protocol         = "-1"
-        from_port        = 0
-        to_port          = 0
-        cidr_blocks      = ["0.0.0.0/0"]
-        ipv6_cidr_blocks = ["::/0"]
-    }
-    tags = {
-        Name        = "${var.name}-sg-rds-${var.environment}"
-        Environment = var.environment
-    }
+  name   = "${var.name}-sg-rds-${var.environment}"
+  vpc_id = var.vpc_id
+  ingress {
+    protocol    = "tcp"
+    description = "port of mysql server"
+    from_port   = 3306
+    to_port     = 3306
+    cidr_blocks = ["10.0.0.0/28"]
+  }
+  egress {
+    protocol         = "-1"
+    from_port        = 0
+    to_port          = 0
+    cidr_blocks      = ["0.0.0.0/0"]
+    ipv6_cidr_blocks = ["::/0"]
+  }
+  tags = {
+    Name        = "${var.name}-sg-rds-${var.environment}"
+    Environment = var.environment
+  }
 }
 
 
@@ -74,16 +74,16 @@ resource "aws_security_group" "ecs_tasks" {
   }
 }
 
-output alb {
-    value = aws_security_group.alb.id
+output "alb" {
+  value = aws_security_group.alb.id
 }
 
 
-output ecs {
-    value = aws_security_group.ecs_tasks.id
+output "ecs" {
+  value = aws_security_group.ecs_tasks.id
 }
 
 
-output rds {
-    value = aws_security_group.rds.id
+output "rds" {
+  value = aws_security_group.rds.id
 }

@@ -80,9 +80,9 @@ resource "aws_ecs_task_definition" "main" {
   task_role_arn            = aws_iam_role.ecs_task_role.arn
   depends_on               = [var.dependency_on_ecr]
   container_definitions = jsonencode([{
-    name        = "${var.name}-mlflow-server-${var.environment}" ##
-    image       = "${var.ecr_repo_url}/${var.name}-mlflow-server-${var.environment}:latest"
-    essential   = true
+    name      = "${var.name}-mlflow-server-${var.environment}" ##
+    image     = "${var.ecr_repo_url}/${var.name}-mlflow-server-${var.environment}:latest"
+    essential = true
     portMappings = [{
       protocol      = "tcp"
       containerPort = var.container_port
@@ -96,11 +96,11 @@ resource "aws_ecs_task_definition" "main" {
         awslogs-region        = var.region
       }
     }
-    secrets = {"BUCKET" = "s3://${var.artifact_bucket}",
-              "USER" = var.db_user,
-              "PASSWORD" = var.db_password,
-              "HOST" = var.db_host,
-              "DATABASE" = var.db_name }
+    secrets = { "BUCKET" = "s3://${var.artifact_bucket}",
+      "USER"     = var.db_user,
+      "PASSWORD" = var.db_password,
+      "HOST"     = var.db_host,
+    "DATABASE" = var.db_name }
   }])
 
   tags = {

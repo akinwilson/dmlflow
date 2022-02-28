@@ -13,15 +13,14 @@ variable "region" {
   default     = "eu-west-2"
 }
 
-
 variable "availability_zones" {
   description = "a comma-separated list of availability zones, defaults to all AZ of the region, if set to something other than the defaults, both private_subnets and public_subnets have to be defined as well"
-  default     = ["eu-west-2a", "eu-west-2b", "eu-west-2c"]
+  default     = ["eu-west-2a", "eu-west-2b"]
 }
 
 variable "cidr" {
   description = "The CIDR block for the VPC."
-  default     = "10.0.0.0/20"
+  default     = "10.0.0.0/16"
 }
 
 variable "private_subnets" {
@@ -31,12 +30,12 @@ variable "private_subnets" {
 
 variable "public_subnets" {
   description = "a list of CIDRs for public subnets in your VPC, must be set if the cidr variable is defined, needs to have as many elements as there are availability zones"
-  default     = ["10.0.64.0/20", "10.0.48.0/20"]
+  default     = ["10.0.16.0/20", "10.0.48.0/20"]
 }
 
 variable "isolated_subnets" {
   description = "a list fo CIDRs for the isolated subnets for aurora service"
-  default = ["10.0.80.0/20", "10.0.64.0/20"]
+  default     = ["10.0.64.0/20", "10.0.80.0/20"]
 }
 
 variable "service_desired_count" {
@@ -46,9 +45,8 @@ variable "service_desired_count" {
 
 variable "container_port" {
   description = "MLFlow  container port"
-  default = 5000
+  default     = 5000
 }
-
 
 variable "container_cpu" {
   description = "The number of cpu units used by the task"
@@ -57,9 +55,10 @@ variable "container_cpu" {
 
 variable "container_memory" {
   description = "The amount (in MiB) of memory used by the task"
-  default     = 512 
+  default     = 512
 }
-variable "container_environment" {
-  description = "Variables to be injected at serving time into the mlflow server"
-  default =  [{"BUCKET": "...", "USERNAME" : "...",  "PASSWORD" : "...", "HOST": "...","PORT": "..."}]
-}
+
+# variable "container_environment" {
+#   description = "Variables to be injected at serving time into the mlflow server"
+#   default     = []
+# }
