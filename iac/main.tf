@@ -71,7 +71,6 @@ module "ecs" {
   alb_target_group_arn  = module.alb.alb_target_group_arn
   service_desired_count = var.service_desired_count
   environment           = var.environment
-  ecr_repo_url          = module.ecr.ecr_repo_url
   private_subnets       = module.vpc.private
   container_environment = var.container_environment
   container_port        = var.container_port
