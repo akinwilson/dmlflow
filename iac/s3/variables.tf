@@ -2,7 +2,7 @@ variable "name" {
   description = "Name of service"
 }
 
-variable  "region" {
+variable "region" {
   description = "bucket region"
 }
 variable "environment" {
