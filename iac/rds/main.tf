@@ -18,30 +18,30 @@ resource "aws_rds_cluster" "main" {
   backup_retention_period       = 5 // Think about
   deletion_protection           = true
   snapshot_identifier           = var.snapshot_id
-  skip_final_snapshot = true
-  storage_encrypted   = true
+  skip_final_snapshot           = true
+  storage_encrypted             = true
   # kms_key_id          = module.dev_db_kms_key.key_arn
-  db_subnet_group_name = aws_db_subnet_group.main.name
+  db_subnet_group_name   = aws_db_subnet_group.main.name
   vpc_security_group_ids = var.sg
-  
+
 
   lifecycle {
     ignore_changes = [
-      engine_version,  // AWS may upgrade minor versions of the DB engine, adding this so we don't need to update our TF when that happens
+      engine_version, // AWS may upgrade minor versions of the DB engine, adding this so we don't need to update our TF when that happens
     ]
   }
   tags = {
-    Name = "${local.prefix}-aurora-cluster"
+    Name        = "${local.prefix}-aurora-cluster"
     Environment = var.environment
   }
 }
 
 resource "aws_db_subnet_group" "main" {
-  name_prefix     = "${local.prefix}-subnet-group"
+  name_prefix = "${local.prefix}-subnet-group"
   description = "Subnet group for ${local.prefix}"
-  subnet_ids = var.isolated_subnets.*.id
+  subnet_ids  = var.isolated_subnets.*.id
   tags = {
-    Name = "${local.prefix}-subnet-group"
+    Name        = "${local.prefix}-subnet-group"
     Environment = var.environment
   }
 }
@@ -50,11 +50,11 @@ resource "aws_rds_cluster_instance" "aurora_db_instance" {
   count              = var.instance_count
   identifier         = "${var.cluster_identifier}-instance-${count.index}"
   cluster_identifier = aws_rds_cluster.main.id
-  instance_class     = "db.t3.medium"
+  instance_class     = "db.t4g.micro"
   engine             = aws_rds_cluster.main.engine
   engine_version     = aws_rds_cluster.main.engine_version
   tags = {
-    Name = "${local.prefix}-aurora-db-instance"
+    Name        = "${local.prefix}-aurora-db-instance"
     Environment = var.environment
   }
 }
@@ -74,4 +74,27 @@ resource "aws_iam_role" "proxy_iam_role" {
       },
     ]
   })
+}
+
+output "db_username" {
+  value = aws_rds_cluster.main.master_username 
+}
+
+output "db_host" {
+  value = aws_rds_cluster.main.endpoint 
+}
+
+#
+output "db_name" {
+  value = aws_rds_cluster.main.database_name
+}
+
+# #
+# output "db_port" {
+#   value = aws_rds_cluster.main.port
+# }
+
+#
+output "db_password" {
+  value = random_password.password
 }

@@ -83,7 +83,6 @@ resource "aws_ecs_task_definition" "main" {
     name        = "${var.name}-mlflow-server-${var.environment}" ##
     image       = "${var.ecr_repo_url}/${var.name}-mlflow-server-${var.environment}:latest"
     essential   = true
-    environment = var.container_environment
     portMappings = [{
       protocol      = "tcp"
       containerPort = var.container_port
@@ -97,7 +96,13 @@ resource "aws_ecs_task_definition" "main" {
         awslogs-region        = var.region
       }
     }
+    secrets = {"BUCKET" = "s3://${var.artifact_bucket}",
+              "USER" = var.db_user,
+              "PASSWORD" = var.db_password,
+              "HOST" = var.db_host,
+              "DATABASE" = var.db_name }
   }])
+
   tags = {
     Name        = "${var.name}-task-${var.environment}"
     Environment = var.environment

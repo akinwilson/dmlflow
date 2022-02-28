@@ -7,7 +7,7 @@ resource "aws_s3_bucket" "main" {
   }
 }
 
-output "s3" {
-  value = aws_s3_bucket.main
+output "bucket" {
+  value = aws_s3_bucket.main.id
 }
 
