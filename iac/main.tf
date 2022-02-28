@@ -72,11 +72,15 @@ module "ecs" {
   service_desired_count = var.service_desired_count
   environment           = var.environment
   private_subnets       = module.vpc.private
-  container_environment = var.container_environment
   container_port        = var.container_port
   container_cpu         = var.container_cpu
   container_memory      = var.container_memory
   dependency_on_ecr     = module.ecr.dependency_on_ecr
+  artifact_bucket       = module.s3.bucket
+  db_host               = module.rds.db_host
+  db_name               = module.rds.db_name
+  db_user               = module.rds.db_username
+  db_password           = module.rds.db_password
 }
 
 module "ecr" {
