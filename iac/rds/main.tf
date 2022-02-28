@@ -1,5 +1,5 @@
 locals {
-  prefix          = "${var.environment}-${var.cluster_identifier}"
+  prefix          = var.environment
   database_port   = 3306
   database_engine = "aurora-mysql"
 }
@@ -16,7 +16,7 @@ resource "aws_rds_cluster" "main" {
   master_username               = var.database_user
   master_password               = random_password.password.result
   backup_retention_period       = 5 // Think about
-  deletion_protection           = true
+  deletion_protection           = false
   snapshot_identifier           = var.snapshot_id
   skip_final_snapshot           = true
   storage_encrypted             = true
@@ -50,7 +50,7 @@ resource "aws_rds_cluster_instance" "aurora_db_instance" {
   count              = var.instance_count
   identifier         = "${var.cluster_identifier}-instance-${count.index}"
   cluster_identifier = aws_rds_cluster.main.id
-  instance_class     = "db.t4g.micro"
+  instance_class     = "db.t2.small"
   engine             = aws_rds_cluster.main.engine
   engine_version     = aws_rds_cluster.main.engine_version
   tags = {
@@ -96,5 +96,5 @@ output "db_name" {
 
 #
 output "db_password" {
-  value = random_password.password
+  value = random_password.password.result
 }

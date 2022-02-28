@@ -44,7 +44,7 @@ variable "service_desired_count" {
 }
 
 variable "container_port" {
-  description = "MLFlow  container port"
+  description = "MLFlow container port"
   default     = 5000
 }
 
@@ -58,7 +58,7 @@ variable "container_memory" {
   default     = 512
 }
 
-# variable "container_environment" {
-#   description = "Variables to be injected at serving time into the mlflow server"
-#   default     = []
-# }
+
+variable "bucket_name" {
+  default = "artifact-store"
+}

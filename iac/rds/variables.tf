@@ -30,7 +30,7 @@ variable "cluster_identifier" {
 variable "database_name" {
   type        = string
   description = "Name of the DB in mysql"
-  default     = "mlflow-store"
+  default     = "mlflowStore"
 }
 
 variable "database_user" {

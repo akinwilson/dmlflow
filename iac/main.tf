@@ -50,6 +50,7 @@ module "s3" {
   name        = var.name
   environment = var.environment
   region      = var.region
+  bucket_name = var.bucket_name
 }
 
 
@@ -177,6 +178,7 @@ resource "aws_iam_policy" "iam_policy" {
 resource "aws_iam_user" "terraform_agent_user" {
   name = "terraform_agent_user"
 }
+
 resource "aws_iam_user_policy_attachment" "tf_attach" {
   user       = aws_iam_user.terraform_agent_user.name
   policy_arn = aws_iam_policy.iam_policy.arn

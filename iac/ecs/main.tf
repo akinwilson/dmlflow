@@ -81,8 +81,13 @@ resource "aws_ecs_task_definition" "main" {
   depends_on               = [var.dependency_on_ecr]
   container_definitions = jsonencode([{
     name      = "${var.name}-mlflow-server-${var.environment}" ##
-    image     = "${var.ecr_repo_url}/${var.name}-mlflow-server-${var.environment}:latest"
+    image     = "${var.ecr_repo_url}/:latest"
     essential = true
+    environment = [{ "name" : "BUCKET", "value" :"s3://${var.artifact_bucket}"},
+                   { "name": "USERNAME", "value":  var.db_user},
+                   { "name": "PASSWORD", "value": var.db_password},
+                   { "name": "HOST", "value" : var.db_host},
+                   { "name": "DATABASE", "value" : var.db_name }]
     portMappings = [{
       protocol      = "tcp"
       containerPort = var.container_port
@@ -96,11 +101,6 @@ resource "aws_ecs_task_definition" "main" {
         awslogs-region        = var.region
       }
     }
-    secrets = { "BUCKET" = "s3://${var.artifact_bucket}",
-      "USER"     = var.db_user,
-      "PASSWORD" = var.db_password,
-      "HOST"     = var.db_host,
-    "DATABASE" = var.db_name }
   }])
 
   tags = {
@@ -137,7 +137,7 @@ resource "aws_ecs_service" "main" {
 
   load_balancer {
     target_group_arn = var.alb_target_group_arn
-    container_name   = "${var.name}-retriever-${var.environment}"
+    container_name   = "${var.name}-mlflow-server-${var.environment}"
     container_port   = var.container_port
   }
   lifecycle {

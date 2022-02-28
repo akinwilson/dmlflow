@@ -127,13 +127,13 @@ resource "aws_route_table" "isolated" {
     Environment = var.environment
   }
 }
+
 resource "aws_route" "isolated" {
   count                  = length(compact(var.isolated_subnets))
   route_table_id         = element(aws_route_table.isolated.*.id, count.index)
   destination_cidr_block = "0.0.0.0/0"
   nat_gateway_id         = element(aws_nat_gateway.main.*.id, count.index)
 }
-
 
 resource "aws_route_table_association" "private" {
   count          = length(var.private_subnets)
@@ -201,16 +201,18 @@ resource "aws_iam_role_policy" "vpc-flow-logs-policy" {
   ] })
 }
 
-
 output "id" {
   value = aws_vpc.main.id
 }
+
 output "private" {
   value = aws_subnet.private
 }
+
 output "public" {
   value = aws_subnet.public
 }
+
 output "isolated" {
   value = aws_subnet.isolated
 }
