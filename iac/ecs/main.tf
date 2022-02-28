@@ -70,6 +70,7 @@ resource "aws_cloudwatch_log_group" "main" {
 }
 
 resource "aws_ecs_task_definition" "main" {
+
   family                   = "${var.name}-task-${var.environment}"
   network_mode             = "awsvpc"
   requires_compatibilities = ["FARGATE"]
@@ -79,8 +80,8 @@ resource "aws_ecs_task_definition" "main" {
   task_role_arn            = aws_iam_role.ecs_task_role.arn
   depends_on               = [var.dependency_on_ecr]
   container_definitions = jsonencode([{
-    name        = "${var.name}-retriever-${var.environment}" ##
-    image       = ""
+    name        = "${var.name}-mlflow-server-${var.environment}" ##
+    image       = "${var.ecr_repo_url}/${var.name}-mlflow-server-${var.environment}:latest"
     essential   = true
     environment = var.container_environment
     portMappings = [{
