@@ -41,10 +41,16 @@ variable "service_desired_count" {
 variable "container_environment" {
   description = "The container environmnent variables"
   type        = list(any)
-  
+
 }
 
 variable "ecr_repo_url" {
   description = "URL of the repostory container the image to be served over ECS"
+}
+
+variable "dependency_on_ecr" {
+  description = "Ensure that ecs task is not started until the image required is in the repo"
+
+
 }
 

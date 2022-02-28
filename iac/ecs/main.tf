@@ -46,11 +46,11 @@ resource "aws_iam_policy" "s3" {
       {
         Effect = "Allow",
         Action = [
-                "s3:*",
-                "s3-object-lambda:*"
+          "s3:*",
+          "s3-object-lambda:*"
         ],
-        Resource  = "*"
-        }]
+        Resource = "*"
+    }]
   })
 }
 
@@ -77,7 +77,7 @@ resource "aws_ecs_task_definition" "main" {
   memory                   = var.container_memory
   execution_role_arn       = aws_iam_role.ecs_task_execution_role.arn
   task_role_arn            = aws_iam_role.ecs_task_role.arn
-
+  depends_on               = [var.dependency_on_ecr]
   container_definitions = jsonencode([{
     name        = "${var.name}-retriever-${var.environment}" ##
     image       = ""
@@ -122,6 +122,7 @@ resource "aws_ecs_service" "main" {
   launch_type                        = "FARGATE"
   scheduling_strategy                = "REPLICA"
 
+  depends_on = [var.dependency_on_ecr]
   network_configuration {
     security_groups  = var.sg
     subnets          = var.private_subnets.*.id
