@@ -11,11 +11,11 @@ RUN pip install --user --upgrade pip
 RUN pip install --user mlflow \
                        pymysql \
                        boto3
-
+                       
 # switch to root to allow changing the ownership of the directory
 USER root 
-RUN chown -R $USERNAME $(pwd)7
-# switch back to the user that now owns working directory.
+RUN chown -R $USERNAME $(pwd)
+# switch back to user that owns pwd
 USER $USERNAME 
 
 RUN mkdir mlflow
