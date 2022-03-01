@@ -1,13 +1,27 @@
 FROM python:3.8.0
 
-RUN pip install \
-    mlflow \
-    pymysql \
-    boto3 & \
-    mkdir /mlflow/
+WORKDIR /usr/src/app
 
+ARG USERNAME=mlflowUser
+RUN useradd -ms /bin/bash $USERNAME
+
+
+USER $USERNAME
+ENV PATH "$PATH:/home/$USERNAME/.local/bin"
+
+RUN pip install --user --upgrade pip
+RUN pip install --user mlflow \
+                       pymysql \
+                       boto3
+
+USER root 
+RUN chown -R $USERNAME $(pwd)
+USER $USERNAME 
+
+RUN mkdir mlflow
+ 
 EXPOSE 5000
-
+EXPOSE 3306
 ## Environment variables made available through the Fargate task.
 ## Do not enter values
 CMD mlflow server \
