@@ -20,7 +20,8 @@ aws s3api delete-objects --bucket $AWS_BUCKET --delete "$(aws s3api list-object-
 aws s3 rb s3://$AWS_BUCKET --force
 
 
-echo "Finished clean"
+echo "Finished cleaning up backend of terrform state store"
+echo ""
 exit 1
 
 
