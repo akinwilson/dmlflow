@@ -5,6 +5,7 @@ AWS_PROFILE="akinwilson"
 AWS_REGION="eu-west-2"
 AWS_BUCKET="infra-euw2"
 echo "Deleting state store bucket of terraform..."
+echo ""
 echo "aws account: ${AWS_PROFILE}"
 echo "aws region: ${AWS_REGION}"
 echo "aws s3 bucket name: ${AWS_BUCKET}"
@@ -19,7 +20,8 @@ aws s3api delete-objects --bucket $AWS_BUCKET --delete "$(aws s3api list-object-
 aws s3 rb s3://$AWS_BUCKET --force
 
 
-echo "Finished clean"
+echo "Finished cleaning up backend of terrform state store"
+echo ""
 exit 1
 
 

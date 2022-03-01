@@ -24,13 +24,13 @@ variable "snapshot_id" {
 variable "cluster_identifier" {
   type        = string
   description = "Name of the aurora cluster"
-  default = "mlflow-backend"
+  default     = "mlflow-backend"
 }
 
 variable "database_name" {
   type        = string
   description = "Name of the DB in mysql"
-  default     = "mlflow-store"
+  default     = "mlflowStore"
 }
 
 variable "database_user" {

@@ -1,13 +1,14 @@
 resource "aws_s3_bucket" "main" {
-  bucket = "mlflow-artifacts"
-  acl    = "private"
-  tags = {
-        Name = "${var.name}-mlflow-artifacts-bucket-${var.environment}"
-        Environment = var.environment
-        }
+  bucket        = var.bucket_name
+  acl           = "private"
+  force_destroy = true
+  # tags = {
+  #   Name        = "${var.name}-artifacts-bucket-${var.environment}"
+  #   Environment = var.environment
+  # }
 }
 
-output s3 {
-  value = aws_s3_bucket.main 
+output "bucket" {
+  value = aws_s3_bucket.main.id
 }
 

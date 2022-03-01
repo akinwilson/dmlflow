@@ -46,11 +46,11 @@ resource "aws_iam_policy" "s3" {
       {
         Effect = "Allow",
         Action = [
-                "s3:*",
-                "s3-object-lambda:*"
+          "s3:*",
+          "s3-object-lambda:*"
         ],
-        Resource  = "*"
-        }]
+        Resource = "*"
+    }]
   })
 }
 
@@ -70,6 +70,7 @@ resource "aws_cloudwatch_log_group" "main" {
 }
 
 resource "aws_ecs_task_definition" "main" {
+
   family                   = "${var.name}-task-${var.environment}"
   network_mode             = "awsvpc"
   requires_compatibilities = ["FARGATE"]
@@ -77,12 +78,17 @@ resource "aws_ecs_task_definition" "main" {
   memory                   = var.container_memory
   execution_role_arn       = aws_iam_role.ecs_task_execution_role.arn
   task_role_arn            = aws_iam_role.ecs_task_role.arn
-
+  depends_on               = [var.dependency_on_ecr]
   container_definitions = jsonencode([{
-    name        = "${var.name}-retriever-${var.environment}" ##
-    image       = ""
-    essential   = true
-    environment = var.container_environment
+    name      = "${var.name}-mlflow-server-${var.environment}" ##
+    image     = "${var.ecr_repo_url}:latest"
+    essential = true
+    environment = [{ name = "BUCKET", value = "s3://${var.artifact_bucket}" },
+      { name = "USERNAME", value = var.db_user },
+      { name = "PASSWORD", value = var.db_password },
+      { name = "HOST", value = var.db_host },
+      { name = "DATABASE", value = var.db_name },
+    { name = "PORT", value = "${tostring(var.db_port)}" }]
     portMappings = [{
       protocol      = "tcp"
       containerPort = var.container_port
@@ -97,6 +103,7 @@ resource "aws_ecs_task_definition" "main" {
       }
     }
   }])
+
   tags = {
     Name        = "${var.name}-task-${var.environment}"
     Environment = var.environment
@@ -122,6 +129,7 @@ resource "aws_ecs_service" "main" {
   launch_type                        = "FARGATE"
   scheduling_strategy                = "REPLICA"
 
+  depends_on = [var.dependency_on_ecr]
   network_configuration {
     security_groups  = var.sg
     subnets          = var.private_subnets.*.id
@@ -130,7 +138,7 @@ resource "aws_ecs_service" "main" {
 
   load_balancer {
     target_group_arn = var.alb_target_group_arn
-    container_name   = "${var.name}-retriever-${var.environment}"
+    container_name   = "${var.name}-mlflow-server-${var.environment}"
     container_port   = var.container_port
   }
   lifecycle {

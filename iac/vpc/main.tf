@@ -1,17 +1,17 @@
 resource "aws_vpc" "main" {
-    cidr_block = var.cidr
-    enable_dns_hostnames = true
-    enable_dns_support = true
-    tags = {
-        Name = "${var.name}-vpc-${var.environment}"
-        Environment = var.environment
-    }
+  cidr_block           = var.cidr
+  enable_dns_hostnames = true
+  enable_dns_support   = true
+  tags = {
+    Name        = "${var.name}-vpc-${var.environment}"
+    Environment = var.environment
+  }
 }
 
 resource "aws_eip" "nat" {
   # elastic ips for nat of private subnets 
   count = length(var.private_subnets)
-  vpc = true 
+  vpc   = true
   tags = {
     Name        = "${var.name}-eip-${var.environment}-${format("%03d", count.index + 1)}"
     Environment = var.environment
@@ -19,17 +19,17 @@ resource "aws_eip" "nat" {
 }
 
 resource "aws_internet_gateway" "main" {
-  vpc_id = aws_vpc.main.id 
-  tags ={
+  vpc_id = aws_vpc.main.id
+  tags = {
     Name        = "${var.name}-igw-${var.environment}"
     Environment = var.environment
   }
-  
+
 }
 
 resource "aws_nat_gateway" "main" {
   # we DO NOT give a gateway to the isolated subnets for aurora
-  count = length(var.private_subnets)
+  count         = length(var.private_subnets)
   allocation_id = element(aws_eip.nat.*.id, count.index)
   # subnet id in which to place gateway
   subnet_id = element(aws_subnet.public.*.id, count.index)
@@ -44,17 +44,17 @@ resource "aws_vpc_endpoint" "s3" {
   vpc_id       = aws_vpc.main.id
   service_name = "com.amazonaws.${var.region}.s3"
   tags = {
-        Name = "${var.name}-vpc-endpoint-s3-${var.environment}"
-        Environment = var.environment
-    }
+    Name        = "${var.name}-vpc-endpoint-s3-${var.environment}"
+    Environment = var.environment
+  }
 }
 
 resource "aws_subnet" "isolated" {
-  vpc_id = aws_vpc.main.id
+  vpc_id                  = aws_vpc.main.id
   cidr_block              = element(var.isolated_subnets, count.index)
   availability_zone       = element(var.availability_zones, count.index)
   count                   = length(var.isolated_subnets)
-  map_public_ip_on_launch = false 
+  map_public_ip_on_launch = false
   tags = {
     Name        = "${var.name}-isolated-subnet-${var.environment}-${format("%03d", count.index + 1)}"
     Environment = var.environment
@@ -127,13 +127,13 @@ resource "aws_route_table" "isolated" {
     Environment = var.environment
   }
 }
+
 resource "aws_route" "isolated" {
   count                  = length(compact(var.isolated_subnets))
   route_table_id         = element(aws_route_table.isolated.*.id, count.index)
   destination_cidr_block = "0.0.0.0/0"
   nat_gateway_id         = element(aws_nat_gateway.main.*.id, count.index)
 }
-
 
 resource "aws_route_table_association" "private" {
   count          = length(var.private_subnets)
@@ -201,16 +201,18 @@ resource "aws_iam_role_policy" "vpc-flow-logs-policy" {
   ] })
 }
 
-
 output "id" {
   value = aws_vpc.main.id
 }
-output private {
+
+output "private" {
   value = aws_subnet.private
 }
+
 output "public" {
-  value = aws_subnet.public  
+  value = aws_subnet.public
 }
+
 output "isolated" {
   value = aws_subnet.isolated
 }
