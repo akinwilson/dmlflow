@@ -4,7 +4,7 @@ Infrastructure for machine learning operations. Want to remotely host a data sto
 **Production environment set up**
 ![](media/mlopsSetup.jpg "ML operations architecture diagram")
 **Note no authentication is shown in diagram, but will be added behind load balancer using reversed proxy. See: https://github.com/ntropy-network/oauth2-proxy**
-
+![](media/mlflow-config.png "MLFlow configuration")
 
 
 
