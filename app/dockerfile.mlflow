@@ -1,10 +1,8 @@
 FROM python:3.8.0
 
 WORKDIR /usr/src/app
-
 ARG USERNAME=mlflowUser
 RUN useradd -ms /bin/bash $USERNAME
-
 
 USER $USERNAME
 ENV PATH "$PATH:/home/$USERNAME/.local/bin"
@@ -14,8 +12,10 @@ RUN pip install --user mlflow \
                        pymysql \
                        boto3
 
+# switch to root to allow changing the ownership of the directory
 USER root 
-RUN chown -R $USERNAME $(pwd)
+RUN chown -R $USERNAME $(pwd)7
+# switch back to the user that now owns working directory.
 USER $USERNAME 
 
 RUN mkdir mlflow
