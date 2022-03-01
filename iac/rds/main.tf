@@ -3,10 +3,12 @@ locals {
   database_port   = 3306
   database_engine = "aurora-mysql"
 }
+
 resource "random_password" "password" {
   length  = 24
   special = false
 }
+
 resource "aws_rds_cluster" "main" {
   cluster_identifier            = var.cluster_identifier
   engine                        = local.database_engine
@@ -23,8 +25,6 @@ resource "aws_rds_cluster" "main" {
   # kms_key_id          = module.dev_db_kms_key.key_arn
   db_subnet_group_name   = aws_db_subnet_group.main.name
   vpc_security_group_ids = var.sg
-
-
   lifecycle {
     ignore_changes = [
       engine_version, // AWS may upgrade minor versions of the DB engine, adding this so we don't need to update our TF when that happens
@@ -38,7 +38,7 @@ resource "aws_rds_cluster" "main" {
 
 resource "aws_db_subnet_group" "main" {
   name_prefix = "${local.prefix}-subnet-group"
-  description = "Subnet group for ${local.prefix}"
+  description = "Isolated subnet group for ${local.prefix}"
   subnet_ids  = var.isolated_subnets.*.id
   tags = {
     Name        = "${local.prefix}-subnet-group"
@@ -84,17 +84,14 @@ output "db_host" {
   value = aws_rds_cluster.main.endpoint
 }
 
-#
 output "db_name" {
   value = aws_rds_cluster.main.database_name
 }
 
-#
 output "db_port" {
   value = aws_rds_cluster.main.port
 }
 
-#
 output "db_password" {
   value = random_password.password.result
 }
