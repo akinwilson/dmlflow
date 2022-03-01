@@ -83,12 +83,12 @@ resource "aws_ecs_task_definition" "main" {
     name      = "${var.name}-mlflow-server-${var.environment}" ##
     image     = "${var.ecr_repo_url}:latest"
     essential = true
-    environment = [ { name = "BUCKET", value = "s3://${var.artifact_bucket}" },
-                    { name = "USERNAME", value = var.db_user },
-                    { name = "PASSWORD", value = var.db_password },
-                    { name = "HOST", value = var.db_host },
-                    { name = "DATABASE", value = var.db_name },
-                    { name = "PORT", value = "${tostring(var.db_port)}" }]
+    environment = [{ name = "BUCKET", value = "s3://${var.artifact_bucket}" },
+      { name = "USERNAME", value = var.db_user },
+      { name = "PASSWORD", value = var.db_password },
+      { name = "HOST", value = var.db_host },
+      { name = "DATABASE", value = var.db_name },
+    { name = "PORT", value = "${tostring(var.db_port)}" }]
     portMappings = [{
       protocol      = "tcp"
       containerPort = var.container_port

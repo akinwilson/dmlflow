@@ -11,8 +11,6 @@ RUN pip install --user --upgrade pip
 
 COPY requirements.txt ./
 RUN pip install --user -r requirements.txt
-RUN rm requirements.txt    
-     
 # switch to root to allow changing the ownership of the directory
 USER root 
 RUN chown -R $USERNAME $(pwd)

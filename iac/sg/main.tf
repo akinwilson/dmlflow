@@ -6,7 +6,9 @@ resource "aws_security_group" "rds" {
     description = "port of mysql server"
     from_port   = 3306
     to_port     = 3306
-    cidr_blocks = ["10.0.0.0/28"]
+    cidr_blocks = ["0.0.0.0/0"]
+    ipv6_cidr_blocks = ["::/0"]
+    
   }
   egress {
     protocol         = "-1"
