@@ -1,6 +1,20 @@
 #!/bin/bash
 set -x 
 
+# NOTE!
+# These env vars are being passed to the ecr task and into the serving container 
+# Need to configure container to require these at runtime.
+# that is: 
+#        DB_ENV_VARS 
+#        BUCKET_ID/NAME 
+# need to be passed to this script, from the dockerfile. 
+
+# -----> Solution:
+#        build the dockerfile with push-to-ecr via local-provisioner, but pass vars 
+#        building of the docker container 
+
+# envsubst < db-s3-config.txt  
+
 export BUCKET_NAME="mlflow-artifact-store"
 
 if [[ -z "${MLFLOW_ARTIFACT_URI}" ]]; then
