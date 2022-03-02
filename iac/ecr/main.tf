@@ -5,7 +5,7 @@ resource "aws_ecr_repository" "main" {
     scan_on_push = false
   }
   provisioner "local-exec" {
-    command = "../app/push-to-ecr.sh ${var.name} ${var.environment} mlflow dockerfile.mlflow"
+    command = "../app/scripts/push-to-ecr.sh ${var.name} ${var.environment} mlflow dockerfile.mlflow"
   }
 }
 
