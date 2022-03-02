@@ -7,6 +7,14 @@ Incoming requests are sent to the application load balancer, forwarding to the f
 
 **Note no authentication is set up yet, will be using basic single user authentication via an Nginx Proxy** 
 
+**Note** When wanting to configure the tracking server as below, there is a conflict between the flags: `--default-artifact-root` and `--artifacts-destination`. 
+
+*Option 'default-artifact-root' is required, when backend store is not local file based*
+
+This suggests that artifacts are fire written to storage locally (to the fargate task) and later sent to their artifact destination. The implications are: A Reasonable storage ammount should be provided to the fargate task, possibly a NFS. 
+
+
+
 ## MLFlow related logic
 ![](media/mlflow-config.png "MLFlow configuration")
 To restrict public access to the artifact and backend store, a remote host is used as a proxy to interact with the storage services. 
