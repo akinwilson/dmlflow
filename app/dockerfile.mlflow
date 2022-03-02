@@ -1,5 +1,8 @@
 FROM python:3.8.0
 
+LABEL maintainer="Akinola Antony Wilson <akinola.antony.wilson@gmail.com>"
+
+
 WORKDIR /usr/src/app
 ARG USERNAME=mlflowUser
 RUN useradd -ms /bin/bash $USERNAME
@@ -26,5 +29,6 @@ EXPOSE 3306
 CMD mlflow server \
     --host 0.0.0.0 \
     --port 5000 \
+    --default-artifact-root ./mlflow \ 
     --artifacts-destination ${BUCKET} \
     --backend-store-uri mysql+pymysql://${USERNAME}:${PASSWORD}@${HOST}:${PORT}/${DATABASE}
