@@ -12,10 +12,8 @@ set -x
 # -----> Solution:
 #        build the dockerfile with push-to-ecr via local-provisioner, but pass vars 
 #        building of the docker container 
-
 # envsubst < db-s3-config.txt  
 
-export BUCKET_NAME="mlflow-artifact-store"
 
 if [[ -z "${MLFLOW_ARTIFACT_URI}" ]]; then
     echo "MLFLOW_ARTIFACT_URI can not be set. Define default value as ./mlruns"
@@ -24,7 +22,8 @@ fi
 
 if [[ -z "${MLFLOW_ARTIFACT_DESTINATION}"]]; then
     echo "MLFLOW_ARTIFACT_DESTINATION has not been set"
-    export "MLFLOW_ARTIFACT_DESTINATION"="s3://${BUCKET_NAME}"
+    exit 0
+fi 
 
 if [[ -z "${MLFLOW_DB_DIALECT}" ]]; then
     export MLFLOW_DB_DIALECT="mysql+pymysql"
