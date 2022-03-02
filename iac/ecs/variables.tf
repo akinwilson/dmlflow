@@ -39,7 +39,7 @@ variable "service_desired_count" {
 }
 
 variable "artifact_bucket" {
-  description = "Bucket used for backend store arn"
+  description = "Bucket used for artifact store arn"
 }
 
 variable "db_user" {

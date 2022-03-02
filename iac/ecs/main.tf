@@ -46,10 +46,16 @@ resource "aws_iam_policy" "s3" {
       {
         Effect = "Allow",
         Action = [
-          "s3:*",
-          "s3-object-lambda:*"
+          "s3:PutObject",
+          "s3:GetObject",
+          "s3:DeleteObject"
         ],
-        Resource = "*"
+        Resource = ["arn:aws:s3:::${var.artifact_bucket}/*"]
+      },
+      {
+        "Effect" : "Allow",
+        "Action" : ["s3:ListBucket"],
+        "Resource" : ["arn:aws:s3:::${var.artifact_bucket}"]
     }]
   })
 }
