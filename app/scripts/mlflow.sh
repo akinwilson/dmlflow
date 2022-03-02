@@ -1,6 +1,7 @@
 #!/bin/bash
 set -x 
 
+export BUCKET_NAME="mlflow-artifact-store"
 
 if [[ -z "${MLFLOW_ARTIFACT_URI}" ]]; then
     echo "MLFLOW_ARTIFACT_URI can not be set. Define default value as ./mlruns"
@@ -9,7 +10,7 @@ fi
 
 if [[ -z "${MLFLOW_ARTIFACT_DESTINATION}"]]; then
     echo "MLFLOW_ARTIFACT_DESTINATION has not been set"
-    export "MLFLOW_ARTIFACT_DESTINATION"="s3://"
+    export "MLFLOW_ARTIFACT_DESTINATION"="s3://${BUCKET_NAME}"
 
 if [[ -z "${MLFLOW_DB_DIALECT}" ]]; then
     export MLFLOW_DB_DIALECT="mysql+pymysql"
@@ -39,6 +40,6 @@ fi
 exec mlflow server \
     --host 0.0.0.0 \
     --port 5001 \
-    --default-artifact-root "${MLFLOW_ARTIFACT_URI}" \
+    --serve-artifacts \
     --artifacts-destination "${MLFLOW_ARTIFACT_DESTINATION}" \
     --backend-store-uri "${MLFLOW_BACKEND_URI}"

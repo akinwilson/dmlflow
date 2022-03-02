@@ -1,5 +1,5 @@
-
 #!/bin/bash
+
 set -x
 
 if [[ -z "${MLFLOW_TRACKING_USERNAME}" ]]; then
