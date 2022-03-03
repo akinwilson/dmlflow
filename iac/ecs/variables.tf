@@ -65,11 +65,14 @@ variable "db_port" {
   default     = 3036
 }
 
-# variable "container_environment" {
-#   description = "The container environmnent variables"
-#   type        = list(any)
-# }
+variable "mlflow_client_un" {
+  description = "Admin username for mlflow client tracking login"
+}
 
+
+variable "mlflow_client_pw" {
+  description = "Admin password for mlflow client tracking login"
+}
 
 variable "ecr_repo_url" {
   description = "URL of the repostory container the image to be served over ECS"
