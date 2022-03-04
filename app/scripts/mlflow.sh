@@ -1,6 +1,7 @@
 #!/bin/bash
 set -x 
-
+echo "Initialising Mlflow tracking server..."
+echo ""
 # NOTE!
 # These env vars are being passed to the ecr task and into the serving container 
 # Need to configure container to require these at runtime.
@@ -14,15 +15,14 @@ set -x
 #        building of the docker container 
 # envsubst < db-s3-config.txt  
 
-
 if [[ -z "${MLFLOW_ARTIFACT_URI}" ]]; then
     echo "MLFLOW_ARTIFACT_URI can not be set. Define default value as ./mlruns"
     export MLFLOW_ARTIFACT_URI="./mlruns"
 fi
 
-if [[ -z "${MLFLOW_ARTIFACT_DESTINATION}"]]; then
-    echo "MLFLOW_ARTIFACT_DESTINATION has not been set"
-    exit 0
+if [[ -z "${MLFLOW_ARTIFACT_DESTINATION}" ]]; then
+    echo "MLFLOW_ARTIFACT_DESTINATION has not been set. Defaulting to s3"
+    export MLFLOW_ARTIFACT_DESTINATION="s3"
 fi 
 
 if [[ -z "${MLFLOW_DB_DIALECT}" ]]; then
@@ -54,5 +54,5 @@ exec mlflow server \
     --host 0.0.0.0 \
     --port 5001 \
     --serve-artifacts \
-    --artifacts-destination "${MLFLOW_ARTIFACT_DESTINATION}" \
+    --artifacts-destination "${MLFLOW_ARTIFACT_URI}" \
     --backend-store-uri "${MLFLOW_BACKEND_URI}"

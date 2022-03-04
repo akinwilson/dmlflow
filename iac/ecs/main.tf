@@ -90,15 +90,15 @@ resource "aws_ecs_task_definition" "main" {
     image     = "${var.ecr_repo_url}:latest"
     essential = true
     environment = [{ name = "MLFLOW_ARTIFACT_DESTINATION", value = "s3" },
-    { name = "MLFLOW_ARTIFACT_URI", value = "s3://${var.artifact_bucket}" },
+      { name = "MLFLOW_ARTIFACT_URI", value = "s3://${var.artifact_bucket}" },
       { name = "MLFLOW_DB_USERNAME", value = var.db_user },
       { name = "MLFLOW_DB_PASSWORD", value = var.db_password },
       { name = "MLFLOW_DB_HOST", value = var.db_host },
       { name = "MLFLOW_DB_DATABASE", value = var.db_name },
-      { name = "MLFLOW_BACKEND_URI", value = "mysql+pymysql://${var.db_user}:${var.db_password}@${var.db_host}:${var.db_port}"},
+      { name = "MLFLOW_BACKEND_URI", value = "mysql+pymysql://${var.db_user}:${var.db_password}@${var.db_host}:${var.db_port}" },
       { name = "MLFLOW_TRACKING_PASSWORD", value = var.mlflow_client_pw },
       { name = "MLFLOW_TRACKING_USERNAME", value = var.mlflow_client_un },
-      { name = "MLFLOW_DB_PORT", value = "${tostring(var.db_port)}" }]
+    { name = "MLFLOW_DB_PORT", value = "${tostring(var.db_port)}" }]
     portMappings = [{
       protocol      = "tcp"
       containerPort = var.container_port

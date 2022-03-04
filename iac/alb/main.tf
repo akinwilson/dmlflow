@@ -27,24 +27,24 @@ resource "aws_alb_listener" "http" {
   load_balancer_arn = aws_lb.main.id
   port              = 80
   protocol          = "HTTP"
- 
+
   default_action {
-   type = "redirect"
- 
-   redirect {
-     port        = 443
-     protocol    = "HTTPS"
-     status_code = "HTTP_301"
-   }
+    type = "redirect"
+
+    redirect {
+      port        = 443
+      protocol    = "HTTPS"
+      status_code = "HTTP_301"
+    }
   }
 }
- 
+
 resource "aws_alb_listener" "https" {
   load_balancer_arn = aws_lb.main.id
   port              = 443
   protocol          = "HTTPS"
   ssl_policy        = "ELBSecurityPolicy-2016-08"
-  certificate_arn   =  aws_acm_certificate_validation.main.certificate_arn
+  certificate_arn   = aws_acm_certificate_validation.main.certificate_arn
   default_action {
     target_group_arn = aws_alb_target_group.main.id
     type             = "forward"
@@ -52,7 +52,7 @@ resource "aws_alb_listener" "https" {
 }
 
 resource "aws_acm_certificate" "main" {
-  domain_name       = aws_lb.main.dns_name
+  domain_name       = "mlops.com"
   validation_method = "DNS"
   tags = {
     Name        = "${var.name}-ssl-cert-${var.environment}"
@@ -64,7 +64,23 @@ resource "aws_acm_certificate" "main" {
 }
 
 resource "aws_acm_certificate_validation" "main" {
-  certificate_arn         = aws_acm_certificate.main.arn
+  certificate_arn = aws_acm_certificate.main.arn
+}
+
+resource "aws_route53_zone" "main" {
+  name = "mlops.com"
+}
+
+resource "aws_route53_record" "www" {
+  zone_id = aws_route53_zone.main.zone_id
+  name    = "mlops.com"
+  type    = "A"
+
+  alias {
+    name                   = aws_lb.main.dns_name
+    zone_id                = aws_lb.main.zone_id
+    evaluate_target_health = true
+  }
 }
 
 output "alb_target_group_arn" {
