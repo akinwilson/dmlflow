@@ -6,16 +6,10 @@ WORKDIR /usr/src/app
 ARG USERNAME=mlflowUser
 ARG LB_PORT=5000
 
-ENV MLFLOW_ARTIFACT_DESTINATION="" \
-    MLFLOW_ARTIFACT_URI="" \
-    MLFLOW_DB_USERNAME="" \
-    MLFLOW_DB_PASSWORD="" \
-    MLFLOW_DB_HOST="" \
-    MLFLOW_DB_DATABASE="" \
+ENV MLFLOW_ARTIFACT_URI="" \
     MLFLOW_BACKEND_URI="" \
     MLFLOW_TRACKING_PASSWORD="" \
-    MLFLOW_TRACKING_USERNAME="" \
-    MLFLOW_DB_PORT=""
+    MLFLOW_TRACKING_USERNAME="" 
 
 # update and install addition deps 
 RUN apt-get update 
@@ -25,11 +19,6 @@ RUN apt-get install --no-install-recommends --no-install-suggests -y \
 # creates group and user 
 RUN useradd -u 1011 -ms /bin/bash $USERNAME
 
-# RUN cut -d: -f1 /etc/group | sort
-# RUN groupadd -g 1011 $USERNAME
-# WWW (nginx) group and user  
-# RUN user -uid 1011 -H -D -s /bin/sh -G www www
-# switch back to users at runtime
 USER $USERNAME
 
 ENV PATH "$PATH:/home/$USERNAME/.local/bin"
@@ -61,8 +50,4 @@ RUN rm ./scripts/push-to-ecr.sh
 
 # port of incoming traffic as forwarded by load balancer
 EXPOSE ${LB_PORT}
-
-## Environment variables made available through the Fargate task.
-## Do not enter values
-
 ENTRYPOINT ["/bin/bash", "./scripts/entry-point.sh"]
