@@ -65,14 +65,14 @@ variable "db_port" {
   default     = 3036
 }
 
-variable "mlflow_client_un" {
+variable "mlflow_user_un" {
   description = "Admin username for mlflow client tracking login"
   default     = "admin"
   sensitive   = true
 }
 
 
-variable "mlflow_client_pw" {
+variable "mlflow_user_pw" {
   description = "Admin password for mlflow client tracking login"
   default     = "admin"
   sensitive   = true
