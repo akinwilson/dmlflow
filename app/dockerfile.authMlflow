@@ -6,11 +6,13 @@ WORKDIR /usr/src/app
 ARG USERNAME=mlflowUser
 ARG LB_PORT=5000
 
-ENV MLFLOW_ARTIFACT_URI="" \
-    MLFLOW_BACKEND_URI="" \
-    MLFLOW_TRACKING_PASSWORD="" \
-    MLFLOW_TRACKING_USERNAME="" 
+ENV MLFLOW_ARTIFACT_URI=$MLFLOW_ARTIFACT_URI \
+    MLFLOW_BACKEND_URI=$MLFLOW_BACKEND_URI \
+    MLFLOW_TRACKING_PASSWORD=$MLFLOW_TRACKING_PASSWORD \
+    MLFLOW_TRACKING_USERNAME=$MLFLOW_TRACKING_USERNAME 
 
+RUN echo ${MLFLOW_ARTIFACT_URI}
+RUN echo ${MLFLOW_BACKEND_URI}
 # update and install addition deps 
 RUN apt-get update 
 RUN apt-get install --no-install-recommends --no-install-suggests -y \
@@ -20,14 +22,12 @@ RUN apt-get install --no-install-recommends --no-install-suggests -y \
 RUN useradd -u 1011 -ms /bin/bash $USERNAME
 
 USER $USERNAME
-
+# add user to search path 
 ENV PATH "$PATH:/home/$USERNAME/.local/bin"
-
 # pip update and install deps
 RUN pip install --user --upgrade pip
 COPY requirements.txt ./
 RUN pip install --user -r requirements.txt
-
 # switch to root to allow changing the ownership of the directory
 USER root
 # move config files for ngninx and the supervisor

@@ -16,6 +16,6 @@ exec mlflow server \
     --host 0.0.0.0 \
     --port 5001 \
     --serve-artifacts \
-    --default-artifact-root "mlflow-artifacts:/"
-    --artifacts-destination "${MLFLOW_ARTIFACT_URI}" \
-    --backend-store-uri "${MLFLOW_BACKEND_URI}"
+    --default-artifact-root "mlflow-artifacts:/" \
+    --artifacts-destination ${MLFLOW_ARTIFACT_URI} \
+    --backend-store-uri ${MLFLOW_BACKEND_URI}

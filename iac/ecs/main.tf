@@ -91,7 +91,7 @@ resource "aws_ecs_task_definition" "main" {
     essential = true
     environment = [
       { name = "MLFLOW_ARTIFACT_URI", value = "s3://${var.artifact_bucket}" },
-      { name = "MLFLOW_BACKEND_URI", value = "mysql+pymysql://${var.db_user}:${var.db_password}@${var.db_host}:${tostring(var.db_port)}" },
+      { name = "MLFLOW_BACKEND_URI", value = "mysql+pymysql://${var.db_user}:${var.db_password}@${var.db_host}:${tostring(var.db_port)}/${var.db_name}" },
       { name = "MLFLOW_TRACKING_PASSWORD", value = var.mlflow_user_pw },
     { name = "MLFLOW_TRACKING_USERNAME", value = var.mlflow_user_un }]
     portMappings = [{
