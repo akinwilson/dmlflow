@@ -17,6 +17,11 @@ resource "aws_alb_target_group" "main" {
   protocol    = "HTTP"
   vpc_id      = var.vpc_id
   target_type = "ip"
+  health_check {
+    port    = 4999
+    enabled = true
+    path    = "/heatlh"
+  }
   tags = {
     Name        = "${var.name}-tg-${var.environment}"
     Environment = var.environment
@@ -32,13 +37,14 @@ resource "aws_alb_listener" "http" {
     target_group_arn = aws_alb_target_group.main.id
     type             = "forward"
   }
-  #   redirect {
-  #     port        = 443
-  #     protocol    = "HTTPS"
-  #     status_code = "HTTP_301"
-  #   }
-  # }
 }
+#   redirect {
+#     port        = 443
+#     protocol    = "HTTPS"
+#     status_code = "HTTP_301"
+#   }
+# }
+# }
 
 # resource "aws_alb_listener" "https" {
 #   load_balancer_arn = aws_lb.main.id
