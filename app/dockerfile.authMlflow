@@ -50,4 +50,5 @@ RUN rm ./scripts/push-to-ecr.sh
 
 # port of incoming traffic as forwarded by load balancer
 EXPOSE ${LB_PORT}
+
 ENTRYPOINT ["/bin/bash", "./scripts/entry-point.sh"]
