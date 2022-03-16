@@ -68,7 +68,6 @@ resource "aws_iam_role_policy_attachment" "ecs-task-role-policy-attachment" {
 
 resource "aws_cloudwatch_log_group" "main" {
   name = "${var.name}-task-${var.environment}"
-
   tags = {
     Name        = "${var.name}-task-${var.environment}"
     Environment = var.environment
@@ -140,7 +139,6 @@ resource "aws_ecs_service" "main" {
     subnets          = var.private_subnets.*.id
     assign_public_ip = false
   }
-
   load_balancer {
     target_group_arn = var.alb_target_group_arn
     container_name   = "${var.name}-mlflow-server-${var.environment}"
