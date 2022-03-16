@@ -19,7 +19,9 @@ resource "aws_alb_target_group" "main" {
   target_type = "ip"
   health_check {
     enabled = true
-    path    = "/heatlh"
+    path    = "/health"
+    matcher = "200"
+    port = 5000
   }
   tags = {
     Name        = "${var.name}-tg-${var.environment}"
