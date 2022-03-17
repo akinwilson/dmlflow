@@ -21,7 +21,7 @@ resource "aws_alb_target_group" "main" {
     enabled = true
     path    = "/health"
     matcher = "200"
-    port = 5000
+    port    = 5000
   }
   tags = {
     Name        = "${var.name}-tg-${var.environment}"
