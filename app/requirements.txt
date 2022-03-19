@@ -23,7 +23,6 @@ Jinja2==3.0.3
 jmespath==0.10.0
 Mako==1.1.6
 MarkupSafe==2.1.0
-mlflow==1.24.0
 numpy==1.22.2
 packaging==21.3
 pandas==1.4.1
