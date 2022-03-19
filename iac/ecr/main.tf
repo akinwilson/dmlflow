@@ -22,7 +22,7 @@ resource "aws_ecr_lifecycle_policy" "main" {
       selection = {
         tagStatus   = "any"
         countType   = "imageCountMoreThan"
-        countNumber = 10
+        countNumber = 1
       }
     }]
   })
