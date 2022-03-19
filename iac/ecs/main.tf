@@ -37,7 +37,7 @@ resource "aws_iam_role_policy_attachment" "ecs-task-execution-role-policy-attach
   policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonECSTaskExecutionRolePolicy"
 }
 
-resource "aws_iam_policy" "s3" {
+resource "aws_iam_policy" "s3_access" {
   name        = "${var.name}-ecs-s3"
   description = "Policy that allows access s3"
   policy = jsonencode({
@@ -46,23 +46,28 @@ resource "aws_iam_policy" "s3" {
       {
         Effect = "Allow",
         Action = [
-          "s3:*",
-          "s3-object-lambda:*"
+          "s3:PutObject",
+          "s3:GetObject",
+          "s3:DeleteObject"
         ],
-        Resource = "*"
+        Resource = ["arn:aws:s3:::${var.artifact_bucket}/*"]
+      },
+      {
+        "Effect" : "Allow",
+        "Action" : ["s3:ListBucket"],
+        "Resource" : ["arn:aws:s3:::${var.artifact_bucket}"]
     }]
   })
 }
 
 resource "aws_iam_role_policy_attachment" "ecs-task-role-policy-attachment" {
   role       = aws_iam_role.ecs_task_role.name
-  policy_arn = aws_iam_policy.s3.arn
+  policy_arn = aws_iam_policy.s3_access.arn
 }
 
 
 resource "aws_cloudwatch_log_group" "main" {
   name = "${var.name}-task-${var.environment}"
-
   tags = {
     Name        = "${var.name}-task-${var.environment}"
     Environment = var.environment
@@ -83,12 +88,11 @@ resource "aws_ecs_task_definition" "main" {
     name      = "${var.name}-mlflow-server-${var.environment}" ##
     image     = "${var.ecr_repo_url}:latest"
     essential = true
-    environment = [{ name = "BUCKET", value = "s3://${var.artifact_bucket}" },
-      { name = "USERNAME", value = var.db_user },
-      { name = "PASSWORD", value = var.db_password },
-      { name = "HOST", value = var.db_host },
-      { name = "DATABASE", value = var.db_name },
-    { name = "PORT", value = "${tostring(var.db_port)}" }]
+    environment = [
+      { name = "MLFLOW_ARTIFACT_URI", value = "s3://${var.artifact_bucket}" },
+      { name = "MLFLOW_BACKEND_URI", value = "mysql+pymysql://${var.db_user}:${var.db_password}@${var.db_host}:${tostring(var.db_port)}/${var.db_name}" },
+      { name = "MLFLOW_TRACKING_PASSWORD", value = var.mlflow_user_pw },
+    { name = "MLFLOW_TRACKING_USERNAME", value = var.mlflow_user_un }]
     portMappings = [{
       protocol      = "tcp"
       containerPort = var.container_port
@@ -135,7 +139,6 @@ resource "aws_ecs_service" "main" {
     subnets          = var.private_subnets.*.id
     assign_public_ip = false
   }
-
   load_balancer {
     target_group_arn = var.alb_target_group_arn
     container_name   = "${var.name}-mlflow-server-${var.environment}"
@@ -147,8 +150,8 @@ resource "aws_ecs_service" "main" {
 }
 
 resource "aws_appautoscaling_target" "ecs_target" {
-  max_capacity       = 4
-  min_capacity       = 2
+  max_capacity       = 2
+  min_capacity       = 1
   resource_id        = "service/${aws_ecs_cluster.main.name}/${aws_ecs_service.main.name}"
   scalable_dimension = "ecs:service:DesiredCount"
   service_namespace  = "ecs"

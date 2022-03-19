@@ -39,7 +39,7 @@ variable "service_desired_count" {
 }
 
 variable "artifact_bucket" {
-  description = "Bucket used for backend store arn"
+  description = "Bucket used for artifact store arn"
 }
 
 variable "db_user" {
@@ -65,11 +65,18 @@ variable "db_port" {
   default     = 3036
 }
 
-# variable "container_environment" {
-#   description = "The container environmnent variables"
-#   type        = list(any)
-# }
+variable "mlflow_user_un" {
+  description = "Admin username for mlflow client tracking login"
+  default     = "admin"
+  sensitive   = true
+}
 
+
+variable "mlflow_user_pw" {
+  description = "Admin password for mlflow client tracking login"
+  default     = "admin"
+  sensitive   = true
+}
 
 variable "ecr_repo_url" {
   description = "URL of the repostory container the image to be served over ECS"

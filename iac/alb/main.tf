@@ -17,13 +17,18 @@ resource "aws_alb_target_group" "main" {
   protocol    = "HTTP"
   vpc_id      = var.vpc_id
   target_type = "ip"
+  health_check {
+    enabled = true
+    path    = "/health"
+    matcher = "200"
+    port    = 5000
+  }
   tags = {
     Name        = "${var.name}-tg-${var.environment}"
     Environment = var.environment
   }
 }
 
-# http listener
 resource "aws_alb_listener" "http" {
   load_balancer_arn = aws_lb.main.id
   port              = 80

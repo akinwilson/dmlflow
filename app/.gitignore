@@ -1,1 +1,7 @@
 dev-vars
+Pipfile
+.env
+.dev-vars
+.env-auth
+features.txt
+*.ipynb_checkpoints
