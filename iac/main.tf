@@ -1,6 +1,6 @@
 terraform {
   backend "s3" {
-    bucket = "infra-euw2"
+    bucket = "infra-eu-west-2"
     key    = "terraform-svc"
     region = "eu-west-2"
   }
@@ -102,8 +102,8 @@ data "aws_iam_policy_document" "iam_policy_document" {
     resources = [
       "arn:aws:s3:::*/*",
       "arn:aws:s3:::*",
-      "arn:aws:s3:::infra-euw2",
-      "arn:aws:s3:::infra-euw2",
+      "arn:aws:s3:::infra-eu-west-2",
+      "arn:aws:s3:::infra-eu-west-2",
     ]
   }
 
