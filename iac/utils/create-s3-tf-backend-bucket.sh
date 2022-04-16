@@ -4,7 +4,7 @@ set -e
 AWS_ACCOUNT="personal"
 AWS_PROFILE="dev"
 AWS_REGION="eu-west-2"
-AWS_BUCKET="infra-euw2"
+AWS_BUCKET="infra-eu-west-2"
 
 export AWS_PROFILE
 

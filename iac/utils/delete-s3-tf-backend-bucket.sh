@@ -4,7 +4,7 @@ set -e
 AWS_PROFILE="dev"
 AWS_ACCOUNT="personal"
 AWS_REGION="eu-west-2"
-AWS_BUCKET="infra-euw2"
+AWS_BUCKET="infra-eu-west-2"
 echo ""
 echo "Deleting state store bucket of terraform..."
 echo ""
@@ -14,14 +14,9 @@ echo "aws region: ${AWS_REGION}"
 echo "aws s3 bucket name: ${AWS_BUCKET}"
 
 # Delete objects inside state-store bucket 
-# NOTE: try force remove first, if fails, then remove objects first 
-# and retry force removing.
-
-aws s3api delete-objects --bucket $AWS_BUCKET --delete "$(aws s3api list-object-versions --bucket infra-euw2 --query='{Objects: Versions[].{Key:Key,VersionId:VersionId}}')" > /dev/null
-
-# Force remove bucket 
-aws s3 rb s3://$AWS_BUCKET --force
-
+# NOTE: using conditional operator || first try removing object of bucket, if param validation fails due to no 
+# objects being present inside bucket, then force remove bucket
+aws s3api delete-objects --bucket $AWS_BUCKET --delete "$(aws s3api list-object-versions --bucket infra-eu-west-2 --query='{Objects: Versions[].{Key:Key,VersionId:VersionId}}')" > /dev/null && aws s3 rb s3://$AWS_BUCKET --force || aws s3 rb s3://$AWS_BUCKET --force
 
 echo "Finished cleaning up backend of terrform state store"
 echo ""
