@@ -7,7 +7,7 @@ COMPONENT=$3
 IMAGE=$4
 
 REPO="${SERVICE}-${COMPONENT}-${ENV}"
-ACCOUNT="437996125465"
+ACCOUNT="927542126600"
 REGION="eu-west-2"
 
 docker build -f ../app/${IMAGE} -t ${ACCOUNT}.dkr.ecr.${REGION}.amazonaws.com/${REPO} ../app
