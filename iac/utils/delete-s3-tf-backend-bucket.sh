@@ -1,12 +1,14 @@
 #! /bin/bash
 set -e
 
-AWS_PROFILE="akinwilson"
+AWS_PROFILE="dev"
+AWS_ACCOUNT="personal"
 AWS_REGION="eu-west-2"
 AWS_BUCKET="infra-euw2"
 echo "Deleting state store bucket of terraform..."
 echo ""
-echo "aws account: ${AWS_PROFILE}"
+echo "aws account: ${AWS_ACCOUNT}"
+echo "aws profile: ${AWS_PROFILE}"
 echo "aws region: ${AWS_REGION}"
 echo "aws s3 bucket name: ${AWS_BUCKET}"
 

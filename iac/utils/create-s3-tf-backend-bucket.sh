@@ -1,14 +1,17 @@
 #!/bin/bash
 set -e
 
-AWS_PROFILE="akinwilson"
+AWS_ACCOUNT="personal"
+AWS_PROFILE="dev"
 AWS_REGION="eu-west-2"
 AWS_BUCKET="infra-euw2"
 
 echo "Creating backend s3 bucket for terraform version control..."
 echo ""
 echo "This bucket will track the version of infrastructure deployed"
-echo "aws account: ${AWS_PROFILE}"
+
+echo "aws account: ${AWS_ACCOUNT}"
+echo "aws profile: ${AWS_PROFILE}"
 echo "aws region: ${AWS_REGION}"
 echo "aws s3 bucket name: ${AWS_BUCKET}"
 
