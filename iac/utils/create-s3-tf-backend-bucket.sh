@@ -34,5 +34,6 @@ aws s3api put-bucket-versioning \
 --bucket $AWS_BUCKET \
 --versioning-configuration Status=Enabled \
 --profile $AWS_PROFILE >/dev/null
-
+echo ""
+echo "Finished creating ${AWS_BUCKET} s3 terraform backend bucket"
 exit 1
