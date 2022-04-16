@@ -15,12 +15,6 @@ variable "vpc_id" {
   description = "VPC ID"
 }
 
-variable "snapshot_id" {
-  type        = string
-  description = "Snapshot of the latest RDS dev DB"
-  default     = ""
-}
-
 variable "cluster_identifier" {
   type        = string
   description = "Name of the aurora cluster"

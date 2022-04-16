@@ -19,12 +19,10 @@ resource "aws_rds_cluster" "main" {
   master_password               = random_password.password.result
   backup_retention_period       = 5 // Think about
   deletion_protection           = false
-  snapshot_identifier           = var.snapshot_id
   skip_final_snapshot           = true
   storage_encrypted             = true
-  # kms_key_id          = module.dev_db_kms_key.key_arn
-  db_subnet_group_name   = aws_db_subnet_group.main.name
-  vpc_security_group_ids = var.sg
+  db_subnet_group_name          = aws_db_subnet_group.main.name
+  vpc_security_group_ids        = var.sg
   lifecycle {
     ignore_changes = [
       engine_version, // AWS may upgrade minor versions of the DB engine, adding this so we don't need to update our TF when that happens
