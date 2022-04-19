@@ -1,13 +1,9 @@
 #!/bin/bash
 set -e
-
 AWS_ACCOUNT="personal"
 AWS_PROFILE="dev"
 AWS_REGION="eu-west-2"
-AWS_BUCKET="infra-eu-west-2"
-
-export AWS_PROFILE
-
+AWS_BUCKET="iac-svc"
 echo ""
 echo "Creating backend s3 bucket for terraform version control..."
 echo ""
@@ -37,3 +33,5 @@ aws s3api put-bucket-versioning \
 echo ""
 echo "Finished creating ${AWS_BUCKET} s3 terraform backend bucket"
 exit 1
+
+
