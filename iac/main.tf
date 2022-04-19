@@ -1,6 +1,6 @@
 terraform {
   backend "s3" {
-    bucket = "infra-eu-west-2"
+    bucket = "iac-svc"
     key    = "terraform-svc"
     region = "eu-west-2"
   }
@@ -90,10 +90,7 @@ module "ecr" {
   environment = var.environment
 
 }
-# Note that we want to linked the name of the state bucket to the 
-# to where within the resource below it is mentioned 
 
-# recall that ./utils/create-bucket uses the same name as below 
 data "aws_iam_policy_document" "iam_policy_document" {
   statement {
     sid     = "AllowSpecificS3FullAccess"
@@ -102,8 +99,8 @@ data "aws_iam_policy_document" "iam_policy_document" {
     resources = [
       "arn:aws:s3:::*/*",
       "arn:aws:s3:::*",
-      "arn:aws:s3:::infra-eu-west-2",
-      "arn:aws:s3:::infra-eu-west-2",
+      "arn:aws:s3:::iac-svc",
+      "arn:aws:s3:::iac-svc",
     ]
   }
 
@@ -138,31 +135,6 @@ data "aws_iam_policy_document" "iam_policy_document" {
     sid = "AllowIAM"
     actions = [
       "iam:*"
-    ]
-    effect    = "Allow"
-    resources = ["*"]
-  }
-  statement {
-    sid = "AllowSecretsManager"
-    actions = [
-      "secretsmanager:*"
-    ]
-    effect    = "Allow"
-    resources = ["*"]
-  }
-  statement {
-    sid = "AllowSSM"
-    actions = [
-      "ssm:PutParameter",
-      "ssm:DeleteParameter",
-      "ssm:GetParameterHistory",
-      "ssm:GetParametersByPath",
-      "ssm:GetParameters",
-      "ssm:GetParameter",
-      "ssm:DeleteParameters",
-      "ssm:DescribeParameters",
-      "ssm:AddTagsToResource",
-      "ssm:ListTagsForResource"
     ]
     effect    = "Allow"
     resources = ["*"]
