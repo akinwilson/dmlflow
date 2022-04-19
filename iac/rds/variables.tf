@@ -15,6 +15,11 @@ variable "vpc_id" {
   description = "VPC ID"
 }
 
+variable "snapshot_id" {
+  type    = string
+  default = ""
+}
+
 variable "cluster_identifier" {
   type        = string
   description = "Name of the aurora cluster"
