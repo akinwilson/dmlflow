@@ -8,6 +8,17 @@ resource "aws_vpc" "main" {
   }
 }
 
+
+resource "aws_internet_gateway" "main" {
+  vpc_id = aws_vpc.main.id
+  tags = {
+    Name        = "${var.name}-igw-${var.environment}"
+    Environment = var.environment
+  }
+
+}
+
+
 resource "aws_eip" "nat" {
   # elastic ips for nat of private subnets 
   count = length(var.private_subnets)
@@ -18,14 +29,6 @@ resource "aws_eip" "nat" {
   }
 }
 
-resource "aws_internet_gateway" "main" {
-  vpc_id = aws_vpc.main.id
-  tags = {
-    Name        = "${var.name}-igw-${var.environment}"
-    Environment = var.environment
-  }
-
-}
 
 resource "aws_nat_gateway" "main" {
   # we DO NOT give a gateway to the isolated subnets for aurora

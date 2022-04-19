@@ -60,5 +60,5 @@ variable "container_memory" {
 
 
 variable "bucket_name" {
-  default = "testing-mlflow-store"
+  default = "testing-artefact-store"
 }

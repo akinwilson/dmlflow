@@ -16,9 +16,8 @@ variable "vpc_id" {
 }
 
 variable "snapshot_id" {
-  type        = string
-  description = "Snapshot of the latest RDS dev DB"
-  default     = ""
+  type    = string
+  default = ""
 }
 
 variable "cluster_identifier" {
