@@ -3,7 +3,7 @@ resource "aws_s3_bucket" "main" {
   acl           = "private"
   force_destroy = true
   tags = {
-    Name        = "${var.name}-artifacts-bucket-${var.environment}"
+    Name        = "${var.name}-artifacts-${var.environment}"
     Environment = var.environment
   }
 }
