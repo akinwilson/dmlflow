@@ -78,8 +78,9 @@ if __name__ == "__main__":
         mlflow.log_metric("rmse",rmse)
         mlflow.log_metric("mae",mae)
         mlflow.log_metric("r2",r2)
-
+        # get the model signature 
         model_sig = get_model_signature(test_x, y_hat)
+        # load the model
         mlflow.sklearn.log_model(sk_model=lr,
                                 artifact_path="model",
                                 registered_model_name="ElasticNetRegressor",
