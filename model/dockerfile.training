@@ -1,10 +1,13 @@
 FROM python:3.8.0
 LABEL maintainer="Akinola Antony Wilson <akinola.antony.wilson@gmail.com>"
 
+ARG USERNAME=trainerUser
+USER $USERNAME
 
+COPY ./requirements.txt ./
 RUN python -m pip install --user --upgrade pip
 RUN python -m pip install --user -r requirements.txt
-
 # get mlflow version that aligns with server version.
 RUN python -m pip install mlflow==1.24.1.dev0 --find-links=https://mlflow-snapshots.s3-us-west-2.amazonaws.com/mlflow-1.24.1.dev0-0.0825716d-py2.py3-none-any.whl
+
 
