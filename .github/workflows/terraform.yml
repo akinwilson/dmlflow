@@ -47,7 +47,7 @@ name: 'Terraform'
 on:
   push:
     branches:
-    - main
+    - development
   pull_request:
 
 permissions:
@@ -57,7 +57,7 @@ jobs:
   terraform:
     name: 'Terraform'
     runs-on: ubuntu-latest
-    environment: production
+    environment: development
 
     # Use the Bash shell regardless whether the GitHub Actions runner is ubuntu-latest, macos-latest, or windows-latest
     defaults:
@@ -65,6 +65,15 @@ jobs:
         shell: bash
 
     steps:
+    # checkouts the repo with the github actions runner 
+    - name: Checkout
+      uses: actions/checkout@v3 
+    # configures the credentials to be used during the deployment 
+    - name: Configure AWS Credentials
+      uses: aws-actions/configure-aws-credentials@v1
+      with:
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
     # Checkout the repository to the GitHub Actions runner
     - name: Checkout
       uses: actions/checkout@v3
