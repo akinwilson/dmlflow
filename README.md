@@ -1,12 +1,19 @@
 # dmlflow
 
+![](img/dmlflow.jpeg "Deployed MLFlow server")
+
 ## Overview 
 dmlflow is a repository containing infrastructure as code and application code to deploy an [MLFlow](https://mlflow.org/) server to AWS. The infrastructure as code language used is [Terraform](https://www.terraform.io/). Mlflow is a framework for systematically recording experiments and acts as a model registry. [AWS fargate](https://aws.amazon.com/fargate/) is used to host the Mlflow server remotely, [AWS S3](https://aws.amazon.com/s3/) as a artifact store (model weights, ids-to-tokens, etc.) and [AWS Aurora](https://en.wikipedia.org/wiki/Amazon_Aurora) as a  database management service for the backend store of Mlflow (model metrics, version info, etc. )
 
 ## Usage 
+Clone the repository. Then, to ensure you have all the required CLI tools, run the script: 
+```
+./check_cli_tools.sh 
+```
+
 
 ## Architecture proposal
-![](media/mlopsSetup.png "ML operations architecture diagram")
+![](imh/mlopsSetup.png "ML operations architecture diagram")
 Incoming requests are sent to the application load balancer, forwarding to the fargate task serving the MLFlow tracking server. Any responses from the server are routed through the network address translation gateway between the private and public subnets, and backout the internet gate to the tracking service user.
 
 **Note no authentication is set up yet, will be using basic single user authentication via an Nginx Proxy** 
@@ -25,4 +32,5 @@ To restrict public access to the artifact and backend store, a remote host is us
 
 **Note**: Using Mysql backend __not__ PostgreSQL as the diagram suggests.
 
-
+## To dos:
+- write `deploy.sh` and `remove.sh` to easily deploy and remove the service
