@@ -13,7 +13,7 @@ Clone the repository. Then, to ensure you have all the required CLI tools, run t
 
 
 ## Architecture proposal
-![](imh/mlopsSetup.png "ML operations architecture diagram")
+![](img/mlopsSetup.png "ML operations architecture diagram")
 Incoming requests are sent to the application load balancer, forwarding to the fargate task serving the MLFlow tracking server. Any responses from the server are routed through the network address translation gateway between the private and public subnets, and backout the internet gate to the tracking service user.
 
 **Note no authentication is set up yet, will be using basic single user authentication via an Nginx Proxy** 
@@ -27,7 +27,7 @@ This suggests that artifacts are fire written to storage locally (to the fargate
 
 
 ## MLFlow related logic
-![](media/mlflow-config.png "MLFlow configuration")
+![](img/mlflow-config.png "MLFlow configuration")
 To restrict public access to the artifact and backend store, a remote host is used as a proxy to interact with the storage services. 
 
 **Note**: Using Mysql backend __not__ PostgreSQL as the diagram suggests.
