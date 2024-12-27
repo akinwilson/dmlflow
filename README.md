@@ -10,11 +10,14 @@ Clone the repository. Then, to ensure you have all the required CLI tools, run t
 ```
 ./check_cli_tools.sh 
 ```
+To remotely deploy the service, run the script:
+```
+./deploy.sh
+```
 
-
-## Architecture proposal
+## System
 ![](img/mlopsSetup.png "ML operations architecture diagram")
-Incoming requests are sent to the application load balancer, forwarding to the fargate task serving the MLFlow tracking server. Any responses from the server are routed through the network address translation gateway between the private and public subnets, and backout the internet gate to the tracking service user.
+Incoming requests come through the [internet gateway](https://docs.aws.amazon.com/vpc/latest/userguide/VPC_Internet_Gateway.html) and  are sent to the [application load balancer](https://aws.amazon.com/elasticloadbalancing/application-load-balancer/), which forwards the request to the fargate task serving the MLFlow tracking server. Any responses from the server are routed through the [network address translation gateway](https://docs.aws.amazon.com/vpc/latest/userguide/vpc-nat-gateway.html) between the private and public subnets, and back out the internet gate to the tracking service user.
 
 **Note no authentication is set up yet, will be using basic single user authentication via an Nginx Proxy** 
 
