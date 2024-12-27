@@ -1,5 +1,9 @@
-# Machine Learning Operations in Production
-Infrastructure for machine learning operations. Want to remotely host a data store for machine learning. Will use Mlflow for systematically recording experiments, AWS fargate to host the mlflow server remotely, AWS S3 as a artifact store (model weights, ids-to-tokens, etc.) and AWS Aurora database management service for the backend store of Mlflow (model metrics, version info, etc. )
+# dmlflow
+
+## Overview 
+dmlflow is a repository containing infrastructure as code and application code to deploy an [MLFlow](https://mlflow.org/) server to AWS. The infrastructure as code language used is [Terraform](https://www.terraform.io/). Mlflow is a framework for systematically recording experiments and acts as a model registry. [AWS fargate](https://aws.amazon.com/fargate/) is used to host the Mlflow server remotely, [AWS S3](https://aws.amazon.com/s3/) as a artifact store (model weights, ids-to-tokens, etc.) and [AWS Aurora](https://en.wikipedia.org/wiki/Amazon_Aurora) as a  database management service for the backend store of Mlflow (model metrics, version info, etc. )
+
+## Usage 
 
 ## Architecture proposal
 ![](media/mlopsSetup.png "ML operations architecture diagram")
