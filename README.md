@@ -25,8 +25,7 @@ Incoming requests come through the [internet gateway](https://docs.aws.amazon.co
 
 *Option 'default-artifact-root' is required, when backend store is not local file based*
 
-This suggests that artifacts are fire written to storage locally (to the fargate task) and later sent to their artifact destination. The implications are: A Reasonable storage ammount should be provided to the fargate task, possibly a NFS. 
-
+The `default-artifact-rool` specifies where artifacts are stored. S3 is used as the artifact root location in this deployment.
 
 
 ## MLFlow related logic
